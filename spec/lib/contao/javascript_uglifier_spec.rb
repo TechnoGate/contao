@@ -49,9 +49,8 @@ module TechnoGate
         end
       end
 
-      describe "#prepare_folders" do
+      describe "#prepare_folders", :fakefs => true do
         before :each do
-          FileUtils.stub(:mkdir_p)
           @js_tmp_path = mock("js_tmp_path").tap {|m| subject.js_tmp_path = m}
           @js_path = mock("js_path").tap {|m| subject.js_path = m}
         end
@@ -59,13 +58,13 @@ module TechnoGate
         it {should respond_to :prepare_folders}
 
         it "should create the js_tmp_path" do
-          FileUtils.should_receive(:mkdir_p).with(@js_tmp_path).once
           subject.send :prepare_folders
+          File.directory?(@js_tmp_path).should be_true
         end
 
         it "should create the js_path" do
-          FileUtils.should_receive(:mkdir_p).with(@js_path).once
           subject.send :prepare_folders
+          File.directory?(@js_path).should be_true
         end
       end
 

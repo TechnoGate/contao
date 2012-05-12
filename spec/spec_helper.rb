@@ -8,9 +8,16 @@
 $: << File.expand_path('../../lib/contao.rb', __FILE__)
 
 require 'contao'
+require 'fakefs/spec_helpers'
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
+
+  config.before :each do
+    if example.metadata[:fakefs]
+      config.include FakeFS::SpecHelpers
+    end
+  end
 end
