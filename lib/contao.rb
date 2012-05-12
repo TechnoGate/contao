@@ -30,6 +30,15 @@ module TechnoGate
     def self.root=(root)
       @@root = Pathname.new(root).expand_path
     end
+
+    # Expandify a path
+    def self.expandify(path)
+      if path.start_with? "/"
+        path
+      else
+        root.join(path)
+      end
+    end
   end
 end
 
