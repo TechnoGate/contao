@@ -118,6 +118,29 @@ module TechnoGate
           File.read(@app_js_path).should == "compiled js"
         end
       end
+
+      describe "#create_hashed_assets", :fakefs do
+        before :each do
+          subject.js_path = "/js"
+          subject.js_file = "app.js"
+
+          FileUtils.mkdir_p subject.js_path
+          @app_js_path = File.join(subject.js_path, subject.js_file)
+
+          File.open(@app_js_path, 'w') do |file|
+            file.write('compiled js')
+          end
+
+          @digest = Digest::MD5.hexdigest('compiled js')
+        end
+
+        it {should respond_to :create_hashed_assets}
+
+        it "should create a minified version of the asset" do
+          subject.send :create_hashed_assets
+          File.exists?(File.join(subject.js_path, "app-#{@digest}.js")).should be_true
+        end
+      end
     end
   end
 end
