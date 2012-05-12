@@ -47,6 +47,23 @@ module TechnoGate
         it "I can init the class js_file" do
           subject.js_file.to_s.should == File.join(@root, "js", "app.js")
         end
+
+        describe "with root path not set" do
+          before :each do
+            TechnoGate::Contao.class_variable_set(:@@root, nil)
+          end
+
+          it "should raise an exception" do
+            expect do
+              JavascriptUglifier.new(
+                js_src_paths: ["app/stylsheets"],
+                js_tmp_path:  'tmp',
+                js_path:      'js',
+                js_file:      'app.js'
+              )
+            end.to raise_error(TechnoGate::Contao::RootNotSet)
+          end
+        end
       end
 
       describe "#compile" do

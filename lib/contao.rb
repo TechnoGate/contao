@@ -3,6 +3,8 @@ require 'contao/version'
 module TechnoGate
   module Contao
 
+    class RootNotSet < RuntimeError; end
+
     # Get the currently running environment
     #
     # @return [Symbol] Currently running environment
@@ -32,7 +34,13 @@ module TechnoGate
     end
 
     # Expandify a path
+    #
+    # @param [String] Path
+    # @return [Pathname] Path converted to absolute path
+    # raises RootNotSet
     def self.expandify(path)
+      raise RootNotSet unless root
+
       if path.start_with? "/"
         path
       else
