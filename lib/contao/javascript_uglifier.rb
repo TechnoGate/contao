@@ -56,7 +56,7 @@ module TechnoGate
         digest = Digest::MD5.hexdigest(File.read(app_js))
         hashed_app_js_filename = "#{js_file.chomp(File.extname(js_file))}-#{digest}#{File.extname(js_file)}"
         hashed_app_js_path = File.join(js_path, hashed_app_js_filename)
-        FileUtils.ln_s js_file, hashed_app_js_path
+        FileUtils.ln_s js_file, hashed_app_js_path unless File.exists?(hashed_app_js_path)
       end
 
       def tmp_app_js
