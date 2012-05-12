@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'uglifier'
 
 module TechnoGate
   module Contao
@@ -25,6 +26,15 @@ module TechnoGate
       def prepare_folders
         FileUtils.mkdir_p js_tmp_path
         FileUtils.mkdir_p js_path
+      end
+
+      # Compile javascripts
+      #
+      # This method compiles javascripts from js_src_paths into
+      # js_path/js_file and it uglifies only if the environment is equal
+      # to :production
+      def compile_javascripts
+
       end
     end
   end

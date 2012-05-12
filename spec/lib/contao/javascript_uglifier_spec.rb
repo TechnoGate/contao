@@ -68,6 +68,14 @@ module TechnoGate
           subject.send :prepare_folders
         end
       end
+
+      describe "#compile_javascripts" do
+        before :each do
+          Uglifier.stub(:new, :compile => true)
+        end
+
+        it {should respond_to :compile_javascripts}
+      end
     end
   end
 end
