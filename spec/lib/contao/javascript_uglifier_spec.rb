@@ -3,6 +3,14 @@ require 'spec_helper'
 module TechnoGate
   module Contao
     describe JavascriptUglifier do
+      before :each do
+        TechnoGate::Contao.env = :development
+
+        silence_warnings do
+          Uglifier = mock("Uglifier").as_null_object
+        end
+      end
+
       describe "attributes" do
         [:js_src_paths, :js_tmp_path, :js_path, :js_file, :options].each do |attr|
           it "should have #{attr} as attr_accessor" do

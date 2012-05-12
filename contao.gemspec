@@ -20,6 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'compass'
   gem.add_dependency 'oily_png'
   gem.add_dependency 'uglifier'
+  gem.add_dependency 'activesupport'
 
   # Development dependencies
   gem.add_development_dependency 'rspec'

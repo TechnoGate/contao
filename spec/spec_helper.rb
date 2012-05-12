@@ -7,6 +7,7 @@
 
 $: << File.expand_path('../../lib/contao.rb', __FILE__)
 
+require 'active_support/core_ext/kernel/reporting'
 require 'contao'
 require 'fakefs/spec_helpers'
 
