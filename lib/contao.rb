@@ -10,6 +10,9 @@ module TechnoGate
       @@env
     end
 
+    # Set the environment
+    #
+    # @param [Symbol] Environment
     def self.env=(env)
       @@env = env
     end
