@@ -16,6 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = Contao::VERSION
 
   # Runtime dependencies
+  gem.add_dependency 'rake'
   gem.add_dependency 'compass'
   gem.add_dependency 'oily_png'
   gem.add_dependency 'uglifier'
