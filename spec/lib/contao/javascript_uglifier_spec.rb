@@ -4,12 +4,22 @@ module TechnoGate
   module Contao
     describe JavascriptUglifier do
       before :each do
-        TechnoGate::Contao.env = :development
+        TechnoGate::Contao.env  = @env  = :development
+        TechnoGate::Contao.root = @root = "/root"
 
         silence_warnings do
           Uglifier = mock("Uglifier").as_null_object
         end
       end
+
+      subject {
+        JavascriptUglifier.new(
+          js_src_paths: ["app/stylsheets"],
+          js_tmp_path:  'tmp',
+          js_path:      'js',
+          js_file:      'app.js'
+        )
+      }
 
       describe "attributes" do
         [:js_src_paths, :js_tmp_path, :js_path, :js_file, :options].each do |attr|
@@ -22,27 +32,20 @@ module TechnoGate
 
       describe "init" do
         it "I can init the class js_src_paths" do
-          mock("js_src_paths").tap do |mock|
-            JavascriptUglifier.new(js_src_paths: mock).js_src_paths.should == mock
-          end
+          subject.js_src_paths.class.should == Array
+          subject.js_src_paths.first.to_s.should == File.join(@root, "app/stylsheets")
         end
 
         it "I can init the class js_tmp_path" do
-          mock("js_tmp_path").tap do |mock|
-            JavascriptUglifier.new(js_tmp_path: mock).js_tmp_path.should == mock
-          end
+          subject.js_tmp_path.to_s.should == File.join(@root, "tmp")
         end
 
         it "I can init the class js_path" do
-          mock("js_path").tap do |mock|
-            JavascriptUglifier.new(js_path: mock).js_path.should == mock
-          end
+          subject.js_path.to_s.should == File.join(@root, "js")
         end
 
         it "I can init the class js_file" do
-          mock("js_file").tap do |mock|
-            JavascriptUglifier.new(js_file: mock).js_file.should == mock
-          end
+          subject.js_file.to_s.should == File.join(@root, "js", "app.js")
         end
       end
 
