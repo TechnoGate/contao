@@ -20,5 +20,24 @@ module TechnoGate
         end
       end
     end
+
+    describe '#root' do
+      it {should respond_to :root}
+      it {should respond_to :root=}
+
+      it "should return @@root" do
+        mock("root").tap do |root|
+          subject.class_variable_set(:@@root, root)
+          subject.root.should == root
+        end
+      end
+
+      it "should set the @@root" do
+        mock("root").tap do |root|
+          subject.root = root
+          subject.class_variable_get(:@@root).should == Pathname.new(root).expand_path
+        end
+      end
+    end
   end
 end

@@ -16,6 +16,20 @@ module TechnoGate
     def self.env=(env)
       @@env = env
     end
+
+    # Get the currently running rootironment
+    #
+    # @return [Symbol] Currently running rootironment
+    def self.root
+      @@root
+    end
+
+    # Set the rootironment
+    #
+    # @param [Symbol] rootironment
+    def self.root=(root)
+      @@root = Pathname.new(root).expand_path
+    end
   end
 end
 
