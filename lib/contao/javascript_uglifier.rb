@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module TechnoGate
   module Contao
     class JavascriptUglifier
@@ -11,8 +13,18 @@ module TechnoGate
         @options      = options
       end
 
+      # Compile javascript into one asset
       def compile
+        prepare_folders
+        compile_javascripts
+        create_hashed_assets
+      end
 
+      protected
+      # Prepare folders
+      def prepare_folders
+        FileUtils.mkdir_p js_tmp_path
+        FileUtils.mkdir_p js_path
       end
     end
   end

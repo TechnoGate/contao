@@ -40,8 +40,34 @@ module TechnoGate
 
       describe "#compile" do
         it {should respond_to :compile}
+
+        it "should have the following call stack" do
+          subject.should_receive(:prepare_folders).once.ordered
+          subject.should_receive(:compile_javascripts).once.ordered
+          subject.should_receive(:create_hashed_assets).once.ordered
+          subject.compile
+        end
+      end
+
+      describe "#prepare_folders" do
+        before :each do
+          FileUtils.stub(:mkdir_p)
+          @js_tmp_path = mock("js_tmp_path").tap {|m| subject.js_tmp_path = m}
+          @js_path = mock("js_path").tap {|m| subject.js_path = m}
+        end
+
+        it {should respond_to :prepare_folders}
+
+        it "should create the js_tmp_path" do
+          FileUtils.should_receive(:mkdir_p).with(@js_tmp_path).once
+          subject.send :prepare_folders
+        end
+
+        it "should create the js_path" do
+          FileUtils.should_receive(:mkdir_p).with(@js_path).once
+          subject.send :prepare_folders
+        end
       end
     end
-
   end
 end
