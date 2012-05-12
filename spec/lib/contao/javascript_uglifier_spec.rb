@@ -37,6 +37,11 @@ module TechnoGate
           end
         end
       end
+
+      describe "#compile" do
+        it {should respond_to :compile}
+      end
     end
+
   end
 end

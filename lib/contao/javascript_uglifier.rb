@@ -11,7 +11,7 @@ module TechnoGate
         @options      = options
       end
 
-      def compile(env = :development)
+      def compile
 
       end
     end
