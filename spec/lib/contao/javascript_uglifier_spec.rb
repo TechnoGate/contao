@@ -49,26 +49,26 @@ module TechnoGate
         end
       end
 
-      describe "#prepare_folders", :fakefs => true do
+      describe "#prepare_folders", :fakefs do
         before :each do
-          @js_tmp_path = mock("js_tmp_path").tap {|m| subject.js_tmp_path = m}
-          @js_path = mock("js_path").tap {|m| subject.js_path = m}
+          subject.js_tmp_path = '/tmp'
+          subject.js_path     = '/src'
         end
 
         it {should respond_to :prepare_folders}
 
         it "should create the js_tmp_path" do
           subject.send :prepare_folders
-          File.directory?(@js_tmp_path).should be_true
+          File.directory?(subject.js_tmp_path).should be_true
         end
 
         it "should create the js_path" do
           subject.send :prepare_folders
-          File.directory?(@js_path).should be_true
+          File.directory?(subject.js_path).should be_true
         end
       end
 
-      describe "#compile_javascripts" do
+      describe "#compile_javascripts", :fakefs do
         before :each do
           Uglifier.stub(:new, :compile => true)
         end

@@ -15,9 +15,5 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
 
-  config.before :each do
-    if example.metadata[:fakefs]
-      config.include FakeFS::SpecHelpers
-    end
-  end
+  config.include FakeFS::SpecHelpers, :fakefs
 end
