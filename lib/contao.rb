@@ -1,5 +1,8 @@
-require "contao/version"
+require 'contao/version'
 
-module Contao
-  # Your code goes here...
+module TechnoGate
+  module Contao
+  end
 end
+
+require 'contao/javascript_uglifier'
