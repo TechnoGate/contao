@@ -78,10 +78,45 @@ module TechnoGate
 
       describe "#compile_javascripts", :fakefs do
         before :each do
-          Uglifier.stub(:new, :compile => true)
+          Uglifier.any_instance.stub(:compile)
+
+          subject.js_src_paths = ["/src"]
+          subject.js_tmp_path  = "/tmp"
+          subject.js_path      = "/js"
+          subject.js_file      = "app.js"
+
+          FileUtils.mkdir_p subject.js_src_paths.first
+          FileUtils.mkdir_p subject.js_tmp_path
+          FileUtils.mkdir_p subject.js_path
+
+          @file_path   = File.join(subject.js_src_paths.first, "file.js")
+          @app_js_path = File.join(subject.js_path, subject.js_file)
+
+          File.open(@file_path, 'w') do |file|
+            file.write("not compiled js")
+          end
         end
 
         it {should respond_to :compile_javascripts}
+
+        it "should compile javascripts into js_path/js_file" do
+          subject.send :compile_javascripts
+          File.exists?(@app_js_path).should be_true
+        end
+
+        it "should add the contents of file.js to app.js un-minified if env is development" do
+          subject.send :compile_javascripts
+          File.read(@app_js_path).should ==
+            "// #{@file_path}\n#{File.read(@file_path)}\n"
+        end
+
+        it "should add the contents of file.js to app.js minified if env is production" do
+          TechnoGate::Contao.env = :production
+          Uglifier.any_instance.should_receive(:compile).once.and_return("compiled js")
+
+          subject.send :compile_javascripts
+          File.read(@app_js_path).should == "compiled js"
+        end
       end
     end
   end

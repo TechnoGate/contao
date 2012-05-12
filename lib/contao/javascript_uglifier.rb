@@ -34,7 +34,29 @@ module TechnoGate
       # js_path/js_file and it uglifies only if the environment is equal
       # to :production
       def compile_javascripts
+        File.open(tmp_app_js, 'w') do |compressed|
+          js_src_paths.each do |src_path|
+            Dir["#{src_path}/**/*.js"].sort.each do |f|
+              if TechnoGate::Contao.env == :production
+                compressed.write(Uglifier.new.compile(File.read(f)))
+              else
+                compressed.write("// #{f}\n")
+                compressed.write(File.read(f))
+                compressed.write("\n")
+              end
+            end
+          end
+        end
 
+        FileUtils.mv tmp_app_js, app_js
+      end
+
+      def tmp_app_js
+        File.join js_tmp_path, js_file
+      end
+
+      def app_js
+        File.join js_path, js_file
       end
     end
   end
