@@ -15,14 +15,13 @@ module TechnoGate
       subject {
         JavascriptUglifier.new(
           js_src_paths: ["app/stylsheets"],
-          js_tmp_path:  'tmp',
           js_path:      'js',
           js_file:      'app.js'
         )
       }
 
       describe "attributes" do
-        [:js_src_paths, :js_tmp_path, :js_path, :js_file, :options].each do |attr|
+        [:js_src_paths, :js_path, :js_file, :options].each do |attr|
           it "should have #{attr} as attr_accessor" do
             subject.should respond_to(attr)
             subject.should respond_to("#{attr}=")
@@ -34,10 +33,6 @@ module TechnoGate
         it "I can init the class js_src_paths" do
           subject.js_src_paths.class.should == Array
           subject.js_src_paths.first.to_s.should == File.join(@root, "app/stylsheets")
-        end
-
-        it "I can init the class js_tmp_path" do
-          subject.js_tmp_path.to_s.should == File.join(@root, "tmp")
         end
 
         it "I can init the class js_path" do
@@ -57,7 +52,6 @@ module TechnoGate
             expect do
               JavascriptUglifier.new(
                 js_src_paths: ["app/stylsheets"],
-                js_tmp_path:  'tmp',
                 js_path:      'js',
                 js_file:      'app.js'
               )
@@ -89,16 +83,10 @@ module TechnoGate
 
       describe "#prepare_folders", :fakefs do
         before :each do
-          subject.js_tmp_path = '/tmp'
           subject.js_path     = '/src'
         end
 
         it {should respond_to :prepare_folders}
-
-        it "should create the js_tmp_path" do
-          subject.send :prepare_folders
-          File.directory?(subject.js_tmp_path).should be_true
-        end
 
         it "should create the js_path" do
           subject.send :prepare_folders
@@ -111,16 +99,14 @@ module TechnoGate
           Uglifier.any_instance.stub(:compile)
 
           subject.js_src_paths = ["/src"]
-          subject.js_tmp_path  = "/tmp"
           subject.js_path      = "/js"
           subject.js_file      = "app.js"
 
           FileUtils.mkdir_p subject.js_src_paths.first
-          FileUtils.mkdir_p subject.js_tmp_path
           FileUtils.mkdir_p subject.js_path
 
           @file_path   = File.join(subject.js_src_paths.first, "file.js")
-          @app_js_path = File.join(subject.js_path, subject.js_file)
+          @app_js_path = subject.js_file
 
           File.open(@file_path, 'w') do |file|
             file.write("not compiled js")
@@ -151,11 +137,8 @@ module TechnoGate
 
       describe "#create_hashed_assets", :fakefs do
         before :each do
-          subject.js_path = "/js"
-          subject.js_file = "app.js"
-
           FileUtils.mkdir_p subject.js_path
-          @app_js_path = File.join(subject.js_path, subject.js_file)
+          @app_js_path = subject.js_file
 
           File.open(@app_js_path, 'w') do |file|
             file.write('compiled js')
