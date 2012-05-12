@@ -19,6 +19,8 @@ module TechnoGate
         prepare_folders
         compile_javascripts
         create_hashed_assets
+
+        self
       end
 
       protected

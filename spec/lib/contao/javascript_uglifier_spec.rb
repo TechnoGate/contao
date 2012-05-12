@@ -47,7 +47,17 @@ module TechnoGate
       end
 
       describe "#compile" do
+        before :each do
+          subject.stub(:prepare_folders)
+          subject.stub(:compile_javascripts)
+          subject.stub(:create_hashed_assets)
+        end
+
         it {should respond_to :compile}
+
+        it "should return self" do
+          subject.compile.should == subject
+        end
 
         it "should have the following call stack" do
           subject.should_receive(:prepare_folders).once.ordered
