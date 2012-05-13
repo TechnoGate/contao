@@ -1,3 +1,0 @@
-[submodule "contao/system/modules/contao_assets"]
-	path = contao/system/modules/contao_assets
-	url = gitosis@dev0.agence-durable.com:contao_assets.git
