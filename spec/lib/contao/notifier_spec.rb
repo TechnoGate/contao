@@ -12,7 +12,7 @@ module TechnoGate
         before :each do
           @message = "Hello"
           @output  = "Contao>> #{@message}"
-          @colored_message = "\e[0;32mContao>> #{@message}\e[0m"
+          @colored_output = "\e[0;34mContao>>\e[0m \e[0;32m#{@message}\e[0m"
           @options = {title: "Hello, World!"}
 
           ::Guard::UI.stub(:color_enabled?).and_return(false)
@@ -34,7 +34,7 @@ module TechnoGate
 
         it "should use colors if enabled" do
           ::Guard::UI.should_receive(:color_enabled?).once.and_return(true)
-          ::Guard::UI.should_receive(:info).with(@colored_message, @options)
+          ::Guard::UI.should_receive(:info).with(@colored_output, @options)
 
           subject.notify(@message, @options)
         end

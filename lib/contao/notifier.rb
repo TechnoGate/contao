@@ -7,8 +7,11 @@ module TechnoGate
       include Singleton
 
       def notify(message, options = {})
-        message = "Contao>> #{message}"
-        message = "\e[0;32m#{message}\e[0m" if ::Guard::UI.send(:color_enabled?)
+        if ::Guard::UI.send(:color_enabled?)
+          message = "\e[0;34mContao>>\e[0m \e[0;32m#{message}\e[0m"
+        else
+          message = "Contao>> #{message}"
+        end
 
         ::Guard::UI.info(message, options)
       end
