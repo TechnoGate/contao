@@ -70,3 +70,4 @@ module TechnoGate
 end
 
 require 'contao/javascript_compiler'
+require 'contao/stylesheet_compiler'
