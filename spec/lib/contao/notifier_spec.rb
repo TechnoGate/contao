@@ -11,21 +11,23 @@ module TechnoGate
       describe '#notify' do
         before :each do
           @message = "Hello"
-          @colored_message = "\e[0;32m#{@message}\e[0m"
+          @output  = "Contao>> #{@message}"
+          @colored_message = "\e[0;32mContao>> #{@message}\e[0m"
           @options = {title: "Hello, World!"}
+
           ::Guard::UI.stub(:color_enabled?).and_return(false)
         end
 
         it {should respond_to :notify}
 
         it "should call guard ui" do
-          ::Guard::UI.should_receive(:info).with(@message, {})
+          ::Guard::UI.should_receive(:info).with(@output, {})
 
           subject.notify(@message)
         end
 
         it "should send whatever options passed to the info method" do
-          ::Guard::UI.should_receive(:info).with(@message, @options)
+          ::Guard::UI.should_receive(:info).with(@output, @options)
 
           subject.notify(@message, @options)
         end
@@ -40,7 +42,6 @@ module TechnoGate
         it "should be accessible at class level" do
           klass.any_instance.should_receive(:notify).with(@message, @options)
 
-          klass.should respond_to :notify
           klass.notify(@message, @options)
         end
       end
