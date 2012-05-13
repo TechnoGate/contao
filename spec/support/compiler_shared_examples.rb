@@ -31,10 +31,20 @@ shared_examples_for "Compiler" do
       subject.class.compile.should be_instance_of subject.class
     end
 
-    it "should have the following call stack" do
+    it "should have the following call stack for development" do
+      subject.should_receive(:prepare_folders).once.ordered
+      subject.should_receive(:compile_assets).once.ordered
+      subject.should_receive(:create_hashed_assets).never.ordered
+
+      subject.compile
+    end
+
+    it "should have the following call stack for production" do
+      TechnoGate::Contao.env = :production
       subject.should_receive(:prepare_folders).once.ordered
       subject.should_receive(:compile_assets).once.ordered
       subject.should_receive(:create_hashed_assets).once.ordered
+
       subject.compile
     end
   end

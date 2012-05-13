@@ -11,7 +11,7 @@ module TechnoGate
       def compile
         prepare_folders
         compile_assets
-        create_hashed_assets
+        create_hashed_assets if Contao.env == :production
 
         self
       end
