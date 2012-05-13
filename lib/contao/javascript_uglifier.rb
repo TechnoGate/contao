@@ -4,15 +4,9 @@ require 'uglifier'
 module TechnoGate
   module Contao
     class JavascriptUglifier
-      attr_accessor :js_src_paths, :js_path, :js_file, :options
+      attr_accessor :options
 
       def initialize(options = {})
-        @js_src_paths = options.delete(:js_src_paths).map do |path|
-          TechnoGate::Contao.expandify(path)
-        end
-
-        @js_path      = TechnoGate::Contao.expandify options.delete(:js_path)
-        @js_file      = File.join @js_path, options.delete(:js_file)
         @options      = options
       end
 
@@ -28,21 +22,21 @@ module TechnoGate
       protected
       # Prepare folders
       def prepare_folders
-        FileUtils.mkdir_p js_path
+        FileUtils.mkdir_p Contao.expandify(Application.config.assets_public_path)
       end
 
       # Compile javascripts
       #
-      # This method compiles javascripts from js_src_paths into
-      # js_path/js_file and it uglifies only if the environment is equal
-      # to :production
+      # This method compiles javascripts from
+      # Application.config.javascripts_path into
+      # Application.config.assets_public_path/application.js and it uglifies
+      # only if the environment is equal to :production
       def compile_javascripts
-        tmp_app_js = "/tmp/#{File.basename js_file}-#{Time.now.usec}"
+        tmp_app_js = "/tmp/application-#{Time.now.usec}.js"
 
-        FileUtils.mkdir_p '/tmp'
         File.open(tmp_app_js, 'w') do |compressed|
-          js_src_paths.each do |src_path|
-            Dir["#{src_path}/**/*.js"].sort.each do |f|
+          Application.config.javascripts_path.each do |src_path|
+            Dir["#{Contao.expandify(src_path)}/**/*.js"].sort.each do |f|
               if TechnoGate::Contao.env == :production
                 compressed.write(Uglifier.new.compile(File.read(f)))
               else
@@ -54,14 +48,18 @@ module TechnoGate
           end
         end
 
-        FileUtils.mv tmp_app_js, js_file
+        FileUtils.mv tmp_app_js, application_js_path
       end
 
       # This function creates a hashed version of the assets
       def create_hashed_assets
-        digest = Digest::MD5.hexdigest(File.read(js_file))
-        hashed_app_js_path = "#{js_file.chomp(File.extname(js_file))}-#{digest}#{File.extname(js_file)}"
-        FileUtils.ln_s js_file, hashed_app_js_path unless File.exists?(hashed_app_js_path)
+        digest = Digest::MD5.hexdigest(File.read(application_js_path))
+        hashed_app_js_path = "#{application_js_path.to_s.chomp(File.extname(application_js_path))}-#{digest}#{File.extname(application_js_path)}"
+        FileUtils.cp application_js_path, hashed_app_js_path
+      end
+
+      def application_js_path
+        Contao.expandify(Application.config.assets_public_path).join("application.js")
       end
     end
   end

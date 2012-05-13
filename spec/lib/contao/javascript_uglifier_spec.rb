@@ -1,11 +1,26 @@
 require 'spec_helper'
 
+def stub_filesystem!
+  FileUtils.mkdir_p '/root/app/assets/javascripts/javascript'
+  FileUtils.mkdir_p '/root/app/assets/stylesheets'
+  FileUtils.mkdir_p '/root/app/assets/images'
+  FileUtils.mkdir_p '/root/public/resources'
+  FileUtils.mkdir_p '/root/vendor/assets/javascripts/javascript'
+  FileUtils.mkdir_p '/tmp'
+end
+
 module TechnoGate
   module Contao
     describe JavascriptUglifier do
       before :each do
-        TechnoGate::Contao.env  = @env  = :development
-        TechnoGate::Contao.root = @root = "/root"
+        Contao.env  = @env  = :development
+        Contao.root = @root = "/root"
+        Application.configure do
+          config.javascripts_path   = ["vendor/assets/javascripts/javascript", "app/assets/javascripts/javascript"]
+          config.stylesheets_path   = 'app/assets/stylesheets'
+          config.images_path        = 'app/assets/images'
+          config.assets_public_path = 'public/resources'
+        end
 
         silence_warnings do
           Uglifier = mock("Uglifier").as_null_object
@@ -13,50 +28,19 @@ module TechnoGate
       end
 
       subject {
-        JavascriptUglifier.new(
-          js_src_paths: ["app/stylsheets"],
-          js_path:      'js',
-          js_file:      'app.js'
-        )
+        JavascriptUglifier.new
       }
 
       describe "attributes" do
-        [:js_src_paths, :js_path, :js_file, :options].each do |attr|
-          it "should have #{attr} as attr_accessor" do
-            subject.should respond_to(attr)
-            subject.should respond_to("#{attr}=")
-          end
+        it "should have :options as attr_accessor" do
+          subject.should respond_to(:options)
+          subject.should respond_to(:options=)
         end
       end
 
       describe "init" do
-        it "I can init the class js_src_paths" do
-          subject.js_src_paths.class.should == Array
-          subject.js_src_paths.first.to_s.should == File.join(@root, "app/stylsheets")
-        end
-
-        it "I can init the class js_path" do
-          subject.js_path.to_s.should == File.join(@root, "js")
-        end
-
-        it "I can init the class js_file" do
-          subject.js_file.to_s.should == File.join(@root, "js", "app.js")
-        end
-
-        describe "with root path not set" do
-          before :each do
-            TechnoGate::Contao.class_variable_set(:@@root, nil)
-          end
-
-          it "should raise an exception" do
-            expect do
-              JavascriptUglifier.new(
-                js_src_paths: ["app/stylsheets"],
-                js_path:      'js',
-                js_file:      'app.js'
-              )
-            end.to raise_error(TechnoGate::Contao::RootNotSet)
-          end
+        it "should set options" do
+          JavascriptUglifier.new(foo: :bar).options[:foo].should == :bar
         end
       end
 
@@ -82,15 +66,11 @@ module TechnoGate
       end
 
       describe "#prepare_folders", :fakefs do
-        before :each do
-          subject.js_path     = '/src'
-        end
-
         it {should respond_to :prepare_folders}
 
         it "should create the js_path" do
           subject.send :prepare_folders
-          File.directory?(subject.js_path).should be_true
+          File.directory?("/root/public/resources")
         end
       end
 
@@ -98,15 +78,10 @@ module TechnoGate
         before :each do
           Uglifier.any_instance.stub(:compile)
 
-          subject.js_src_paths = ["/src"]
-          subject.js_path      = "/js"
-          subject.js_file      = "app.js"
+          stub_filesystem!
 
-          FileUtils.mkdir_p subject.js_src_paths.first
-          FileUtils.mkdir_p subject.js_path
-
-          @file_path   = File.join(subject.js_src_paths.first, "file.js")
-          @app_js_path = subject.js_file
+          @file_path   = "/root/app/assets/javascripts/javascript/file.js"
+          @app_js_path = "/root/public/resources/application.js"
 
           File.open(@file_path, 'w') do |file|
             file.write("not compiled js")
@@ -115,7 +90,7 @@ module TechnoGate
 
         it {should respond_to :compile_javascripts}
 
-        it "should compile javascripts into js_path/js_file" do
+        it "should compile javascripts into #{@app_js_path}" do
           subject.send :compile_javascripts
           File.exists?(@app_js_path).should be_true
         end
@@ -137,21 +112,28 @@ module TechnoGate
 
       describe "#create_hashed_assets", :fakefs do
         before :each do
-          FileUtils.mkdir_p subject.js_path
-          @app_js_path = subject.js_file
+          stub_filesystem!
+
+          @app_js_path = "/root/public/resources/application.js"
 
           File.open(@app_js_path, 'w') do |file|
             file.write('compiled js')
           end
 
           @digest = Digest::MD5.hexdigest('compiled js')
+          @digested_js_path = "/root/public/resources/application-#{@digest}.js"
         end
 
         it {should respond_to :create_hashed_assets}
 
         it "should create a minified version of the asset" do
           subject.send :create_hashed_assets
-          File.exists?(File.join(subject.js_path, "app-#{@digest}.js")).should be_true
+          File.exists?(@digested_js_path).should be_true
+        end
+
+        it "should have exactly the same content (a copy of the file)" do
+          subject.send :create_hashed_assets
+          File.read(@digested_js_path).should == File.read(@app_js_path)
         end
       end
     end
