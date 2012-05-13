@@ -57,6 +57,14 @@ module TechnoGate
         end
       end
 
+      describe "#generate_manifest" do
+        it "should call generate_manifest_for" do
+          subject.should_receive(:generate_manifest_for).with("javascripts", "js").once
+
+          subject.send :generate_manifest
+        end
+      end
+
       describe "#notify" do
         it "should call Notifier.notify with the appropriate message" do
           Notifier.should_receive(:notify).with("Javascript compiler finished successfully.", title: "JavascriptCompiler").once

@@ -113,4 +113,42 @@ shared_examples_for "Compiler" do
       File.read(@digested_file_path).should == File.read(@file_path)
     end
   end
+
+  describe '#generate_manifest_for', :fakefs do
+    before :each do
+      stub_filesystem!
+
+      @files = [
+        '/root/public/resources/application.js',
+        '/root/public/resources/application-d41d8cd98f00b204e9800998ecf8427e.js'
+      ].each {|f| File.open(f, 'w') {|fh| fh.write ""}}
+
+      @manifest_path = '/root/public/resources/manifest.json'
+    end
+
+    it "should a create a JSON manifest" do
+      subject.send(:generate_manifest_for, "javascripts", "js")
+
+      File.exists?(@manifest_path).should be_true
+    end
+
+    it "should create a JSON manifest with only non-digested files if the env is development" do
+      subject.send(:generate_manifest_for, "javascripts", "js")
+
+      manifest = JSON.parse(File.read(@manifest_path))
+      manifest.should have_key('javascripts')
+      manifest['javascripts'].should include('application.js')
+      manifest['javascripts'].should_not include('application-d41d8cd98f00b204e9800998ecf8427e.js')
+    end
+
+    it "should create a JSON manifest with only the digested file if the env is production" do
+      TechnoGate::Contao.env = :production
+      subject.send(:generate_manifest_for, "javascripts", "js")
+
+      manifest = JSON.parse(File.read(@manifest_path))
+      manifest.should have_key('javascripts')
+      manifest['javascripts'].should include('application-d41d8cd98f00b204e9800998ecf8427e.js')
+      manifest['javascripts'].should_not include('application.js')
+    end
+  end
 end

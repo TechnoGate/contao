@@ -36,6 +36,10 @@ module TechnoGate
           create_digest_for_file Pathname(file).expand_path
         end
       end
+
+      def generate_manifest
+        generate_manifest_for("stylesheets", "css")
+      end
     end
   end
 end

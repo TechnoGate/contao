@@ -46,6 +46,10 @@ module TechnoGate
       def application_js_path
         Contao.expandify(Application.config.assets_public_path).join("application.js")
       end
+
+      def generate_manifest
+        generate_manifest_for("javascripts", "js")
+      end
     end
   end
 end

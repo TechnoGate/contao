@@ -42,6 +42,14 @@ module TechnoGate
         end
       end
 
+      describe "#generate_manifest" do
+        it "should call generate_manifest_for" do
+          subject.should_receive(:generate_manifest_for).with("stylesheets", "css").once
+
+          subject.send :generate_manifest
+        end
+      end
+
       describe "#clean assets" do
         before :each do
           @cleaner = mock('cleaner')

@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'uglifier'
   gem.add_dependency 'activesupport'
   gem.add_dependency 'guard'
+  gem.add_dependency 'json'
 
   # Development dependencies
   gem.add_development_dependency 'rspec'

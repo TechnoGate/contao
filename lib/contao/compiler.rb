@@ -1,4 +1,5 @@
 require 'active_support/core_ext/string/inflections'
+require 'json'
 
 module TechnoGate
   module Contao
@@ -7,7 +8,7 @@ module TechnoGate
 
       def initialize(options = {})
         @options = options
-        @manifest_path = Contao.expandify(Contao::Application.config.assets_public_path).join('manifest.json')
+        @manifest_path = assets_public_path.join('manifest.json')
       end
 
       # Compile assets
@@ -34,9 +35,13 @@ module TechnoGate
       end
 
       protected
+      def assets_public_path
+        Contao.expandify(Contao::Application.config.assets_public_path)
+      end
+
       # Prepare folders
       def prepare_folders
-        FileUtils.mkdir_p Contao.expandify(Application.config.assets_public_path)
+        FileUtils.mkdir_p assets_public_path
       end
 
       def compile_assets
@@ -67,6 +72,30 @@ module TechnoGate
       #
       # This method is expected to be overridden
       def generate_manifest
+      end
+
+      def generate_manifest_for(key, extension)
+        manifest = JSON.parse(File.read(@manifest_path)) rescue {}
+        manifest[key] = []
+
+        all_files      = Dir["#{assets_public_path}/**/*.#{extension}"]
+        digested_files = all_files.select {|f| f =~ /^.+-[0-9a-f]{32}\.js$/}
+        non_digested_files = all_files - digested_files
+
+        if Contao.env == :production
+          files = digested_files
+        else
+          files = non_digested_files
+        end
+
+        files.each do |file|
+          file.slice! "#{assets_public_path}/"
+          manifest[key] << file
+        end
+
+        File.open(@manifest_path, 'w') do |f|
+          f.write(manifest.to_json)
+        end
       end
     end
   end
