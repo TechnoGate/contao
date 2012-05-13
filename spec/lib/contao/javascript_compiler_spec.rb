@@ -48,19 +48,12 @@ module TechnoGate
           File.open(@app_js_path, 'w') do |file|
             file.write('compiled js')
           end
-
-          @digest = Digest::MD5.hexdigest('compiled js')
-          @digested_js_path = "/root/public/resources/application-#{@digest}.js"
         end
 
-        it "should create a minified version of the asset" do
-          subject.send :create_hashed_assets
-          File.exists?(@digested_js_path).should be_true
-        end
+        it "should call :create_digest_for_file" do
+          subject.should_receive(:create_digest_for_file).with(Pathname.new(@app_js_path)).once
 
-        it "should have exactly the same content (a copy of the file)" do
           subject.send :create_hashed_assets
-          File.read(@digested_js_path).should == File.read(@app_js_path)
         end
       end
 

@@ -40,9 +40,7 @@ module TechnoGate
 
       # This function creates a hashed version of the assets
       def create_hashed_assets
-        digest = Digest::MD5.hexdigest(File.read(application_js_path))
-        hashed_app_js_path = "#{application_js_path.to_s.chomp(File.extname(application_js_path))}-#{digest}#{File.extname(application_js_path)}"
-        FileUtils.cp application_js_path, hashed_app_js_path
+        create_digest_for_file(Contao.expandify(Contao::Application.config.assets_public_path).join("application.js"))
       end
 
       def application_js_path
