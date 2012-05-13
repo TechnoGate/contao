@@ -1,9 +1,28 @@
 require 'contao/version'
+require 'singleton'
+require 'ostruct'
 
 module TechnoGate
   module Contao
 
     class RootNotSet < RuntimeError; end
+
+    class Application < OpenStruct
+      include Singleton
+
+      def initialize
+        super
+        self.config = OpenStruct.new
+      end
+
+      def self.configure(&block)
+        instance.instance_eval(&block)
+      end
+
+      def self.config
+        instance.config
+      end
+    end
 
     # Get the currently running environment
     #

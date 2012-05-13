@@ -55,5 +55,40 @@ module TechnoGate
         subject.expandify('/test').to_s.should == '/test'
       end
     end
+
+    describe Contao::Application do
+      subject { Contao::Application.instance }
+
+      it "should be an open struct" do
+        subject.class.superclass.should == OpenStruct
+      end
+
+      it "should have a config as a superclass" do
+        subject.config.class.should == OpenStruct
+      end
+
+      it "should be a singleton class" do
+        Contao::Application.instance.object_id.should ==
+          Contao::Application.instance.object_id
+      end
+
+      describe "config" do
+        it "should set a configuration variable using a block" do
+          Contao::Application.configure do
+            config.foo = :bar
+          end
+
+          Contao::Application.instance.config.foo.should == :bar
+        end
+
+        it "should be accessible form the class level" do
+          Contao::Application.configure do
+            config.foo = :bar
+          end
+
+          Contao::Application.config.foo.should == :bar
+        end
+      end
+    end
   end
 end
