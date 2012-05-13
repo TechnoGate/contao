@@ -1,41 +1,24 @@
+require 'contao/compiler'
 require 'fileutils'
 require 'uglifier'
 
 module TechnoGate
   module Contao
-    class JavascriptCompiler
-      attr_accessor :options
+    class JavascriptCompiler < Compiler
 
       def initialize(options = {})
-        @options      = options
-      end
-
-      # Compile javascript into one asset
-      def compile
-        prepare_folders
-        compile_javascripts
-        create_hashed_assets
-
-        self
-      end
-
-      def self.compile
-        new.compile
+        super
       end
 
       protected
-      # Prepare folders
-      def prepare_folders
-        FileUtils.mkdir_p Contao.expandify(Application.config.assets_public_path)
-      end
 
-      # Compile javascripts
+      # Compile assets
       #
       # This method compiles javascripts from
       # Application.config.javascripts_path into
       # Application.config.assets_public_path/application.js and it uglifies
       # only if the environment is equal to :production
-      def compile_javascripts
+      def compile_assets
         tmp_app_js = "/tmp/application-#{Time.now.usec}.js"
 
         File.open(tmp_app_js, 'w') do |compressed|
