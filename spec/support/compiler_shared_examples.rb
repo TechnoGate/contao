@@ -10,6 +10,11 @@ shared_examples_for "Compiler" do
     it "should set options" do
       subject.class.new(foo: :bar).options[:foo].should == :bar
     end
+
+    it "should set the manifest_path as an instance variable" do
+      subject.instance_variable_get(:@manifest_path).should ==
+        Pathname('/root/public/resources/manifest.json')
+    end
   end
 
   describe "#compile" do
@@ -17,6 +22,7 @@ shared_examples_for "Compiler" do
       subject.class.any_instance.stub(:prepare_folders)
       subject.class.any_instance.stub(:compile_assets)
       subject.class.any_instance.stub(:create_hashed_assets)
+      subject.class.any_instance.stub(:generate_manifest)
       subject.class.any_instance.stub(:notify)
     end
 
@@ -34,6 +40,7 @@ shared_examples_for "Compiler" do
     it "should have the following call stack for development" do
       subject.should_receive(:prepare_folders).once.ordered
       subject.should_receive(:compile_assets).once.ordered
+      subject.should_receive(:generate_manifest).once.ordered
       subject.should_receive(:notify).once.ordered
 
       subject.compile

@@ -7,6 +7,7 @@ module TechnoGate
 
       def initialize(options = {})
         @options = options
+        @manifest_path = Contao.expandify(Contao::Application.config.assets_public_path).join('manifest.json')
       end
 
       # Compile assets
@@ -14,6 +15,7 @@ module TechnoGate
         prepare_folders
         compile_assets
         create_hashed_assets if Contao.env == :production
+        generate_manifest
         notify
 
         self
@@ -58,6 +60,13 @@ module TechnoGate
         digest = Digest::MD5.hexdigest File.read(file_path)
         FileUtils.cp file_path,
           "#{file_path.to_s.chomp(File.extname(file_path))}-#{digest}#{File.extname(file_path)}"
+      end
+
+      # This method generates a manifest of all generated files
+      # so it can be parsed and processed by the PHP application
+      #
+      # This method is expected to be overridden
+      def generate_manifest
       end
     end
   end
