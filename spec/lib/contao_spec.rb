@@ -54,6 +54,11 @@ module TechnoGate
       it "should not expand an expanded path" do
         subject.expandify('/test').to_s.should == '/test'
       end
+
+      it "always return a Pathname" do
+        subject.expandify('app').should be_instance_of Pathname
+        subject.expandify('/app').should be_instance_of Pathname
+      end
     end
 
     describe Contao::Application do

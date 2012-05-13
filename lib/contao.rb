@@ -60,8 +60,8 @@ module TechnoGate
     def self.expandify(path)
       raise RootNotSet unless root
 
-      if path.start_with? "/"
-        path
+      if path.to_s.start_with? "/"
+        Pathname(path).expand_path
       else
         root.join(path)
       end
