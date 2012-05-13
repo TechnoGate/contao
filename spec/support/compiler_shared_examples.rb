@@ -17,6 +17,7 @@ shared_examples_for "Compiler" do
       subject.class.any_instance.stub(:prepare_folders)
       subject.class.any_instance.stub(:compile_assets)
       subject.class.any_instance.stub(:create_hashed_assets)
+      subject.class.any_instance.stub(:notify)
     end
 
     it {should respond_to :compile}
@@ -28,7 +29,6 @@ shared_examples_for "Compiler" do
 
     it "should return self" do
       subject.compile.should == subject
-      subject.class.compile.should be_instance_of subject.class
     end
 
     it "should have the following call stack for development" do
