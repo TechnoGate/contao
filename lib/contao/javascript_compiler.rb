@@ -3,7 +3,7 @@ require 'uglifier'
 
 module TechnoGate
   module Contao
-    class JavascriptUglifier
+    class JavascriptCompiler
       attr_accessor :options
 
       def initialize(options = {})

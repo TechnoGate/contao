@@ -69,4 +69,4 @@ module TechnoGate
   end
 end
 
-require 'contao/javascript_uglifier'
+require 'contao/javascript_compiler'

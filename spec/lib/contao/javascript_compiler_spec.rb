@@ -11,7 +11,7 @@ end
 
 module TechnoGate
   module Contao
-    describe JavascriptUglifier do
+    describe JavascriptCompiler do
       before :each do
         Contao.env  = @env  = :development
         Contao.root = @root = "/root"
@@ -28,7 +28,7 @@ module TechnoGate
       end
 
       subject {
-        JavascriptUglifier.new
+        JavascriptCompiler.new
       }
 
       describe "attributes" do
@@ -40,7 +40,7 @@ module TechnoGate
 
       describe "init" do
         it "should set options" do
-          JavascriptUglifier.new(foo: :bar).options[:foo].should == :bar
+          JavascriptCompiler.new(foo: :bar).options[:foo].should == :bar
         end
       end
 
