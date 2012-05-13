@@ -82,4 +82,28 @@ shared_examples_for "Compiler" do
   describe "#create_hashed_assets" do
     it {should respond_to :create_hashed_assets}
   end
+
+  describe '#create_digest_for_file', :fakefs do
+    before :each do
+      stub_filesystem!
+
+      @file_path = '/root/file.something.extension'
+      File.open(@file_path, 'w') do |f|
+        f.write('some data')
+      end
+
+      @digest = Digest::MD5.hexdigest('some data')
+      @digested_file_path = "/root/file.something-#{@digest}.extension"
+    end
+
+    it "should be able to create a hashed file" do
+      subject.send(:create_digest_for_file, @file_path)
+      File.exists?(@digested_file_path).should be_true
+    end
+
+    it "should have exactly the same content (a copy of the file)" do
+      subject.send(:create_digest_for_file, @file_path)
+      File.read(@digested_file_path).should == File.read(@file_path)
+    end
+  end
 end

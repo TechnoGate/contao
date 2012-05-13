@@ -48,6 +48,17 @@ module TechnoGate
 
         Notifier.notify("#{klass_name.underscore.humanize} finished successfully.", title: klass_name)
       end
+
+      # Create a diges for a given file
+      #
+      # This method creates a digested file for a given file path
+      #
+      # @param [Pathname | String] file_path
+      def create_digest_for_file(file_path)
+        digest = Digest::MD5.hexdigest File.read(file_path)
+        FileUtils.cp file_path,
+          "#{file_path.to_s.chomp(File.extname(file_path))}-#{digest}#{File.extname(file_path)}"
+      end
     end
   end
 end
