@@ -34,7 +34,7 @@ shared_examples_for "Compiler" do
     it "should have the following call stack for development" do
       subject.should_receive(:prepare_folders).once.ordered
       subject.should_receive(:compile_assets).once.ordered
-      subject.should_receive(:create_hashed_assets).never.ordered
+      subject.should_receive(:notify).once.ordered
 
       subject.compile
     end
@@ -44,6 +44,7 @@ shared_examples_for "Compiler" do
       subject.should_receive(:prepare_folders).once.ordered
       subject.should_receive(:compile_assets).once.ordered
       subject.should_receive(:create_hashed_assets).once.ordered
+      subject.should_receive(:notify).once.ordered
 
       subject.compile
     end

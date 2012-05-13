@@ -63,6 +63,14 @@ module TechnoGate
           File.read(@digested_js_path).should == File.read(@app_js_path)
         end
       end
+
+      describe "#notify" do
+        it "should call Notifier.notify with the appropriate message" do
+          Notifier.should_receive(:notify).with("Javascript compiler finished successfully.", title: "JavascriptCompiler").once
+
+          subject.send :notify
+        end
+      end
     end
   end
 end

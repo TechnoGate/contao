@@ -1,3 +1,5 @@
+require 'active_support/core_ext/string/inflections'
+
 module TechnoGate
   module Contao
     class Compiler
@@ -12,6 +14,7 @@ module TechnoGate
         prepare_folders
         compile_assets
         create_hashed_assets if Contao.env == :production
+        notify
 
         self
       end
@@ -38,6 +41,12 @@ module TechnoGate
       end
 
       def create_hashed_assets
+      end
+
+      def notify
+        klass_name = self.class.to_s.split('::').last
+
+        Notifier.notify("#{klass_name.underscore.humanize} finished successfully.", title: klass_name)
       end
     end
   end

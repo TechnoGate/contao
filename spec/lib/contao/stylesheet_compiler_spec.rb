@@ -78,6 +78,14 @@ module TechnoGate
           subject.send :clean
         end
       end
+
+      describe "#notify" do
+        it "should call Notifier.notify with the appropriate message" do
+          Notifier.should_receive(:notify).with("Stylesheet compiler finished successfully.", title: "StylesheetCompiler").once
+
+          subject.send :notify
+        end
+      end
     end
   end
 end
