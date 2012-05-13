@@ -79,6 +79,24 @@ module TechnoGate
         end
       end
 
+      describe 'create_hashed_assets', :fakefs do
+        before :each do
+          stub_filesystem!
+
+          @app_css_path = "/root/public/resources/application.css"
+
+          File.open(@app_css_path, 'w') do |file|
+            file.write('compiled css')
+          end
+        end
+
+        it "should call :create_digest_for_file" do
+          subject.should_receive(:create_digest_for_file).with(Pathname.new(@app_css_path)).once
+
+          subject.send :create_hashed_assets
+        end
+      end
+
       describe "#notify" do
         it "should call Notifier.notify with the appropriate message" do
           Notifier.should_receive(:notify).with("Stylesheet compiler finished successfully.", title: "StylesheetCompiler").once

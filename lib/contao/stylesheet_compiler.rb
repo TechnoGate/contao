@@ -32,7 +32,9 @@ module TechnoGate
       end
 
       def create_hashed_assets
-
+        Dir["#{Contao.expandify(Contao::Application.config.assets_public_path)}/**/*.css"].each do |file|
+          create_digest_for_file Pathname(file).expand_path
+        end
       end
     end
   end
