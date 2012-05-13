@@ -32,6 +32,7 @@ RSpec.configure do |c|
 
     silence_warnings do
       ::Compass::Commands::UpdateProject = stub.as_null_object
+      ::Compass::Commands::CleanProject = stub.as_null_object
       ::Uglifier = mock("Uglifier").as_null_object
     end
   end

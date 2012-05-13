@@ -41,6 +41,43 @@ module TechnoGate
           subject.send :compile_assets
         end
       end
+
+      describe "#clean assets" do
+        before :each do
+          @cleaner = mock('cleaner')
+          @cleaner.stub(:execute)
+
+          Compass::Commands::CleanProject.stub(:new).with(
+            Contao.root,
+            configuration_file: Contao.root.join('config', 'compass.rb')
+          ).and_return(@cleaner)
+        end
+
+        it "should create a new cleaner" do
+          Compass::Commands::CleanProject.should_receive(:new).with(
+            Contao.root,
+            configuration_file: Contao.root.join('config', 'compass.rb')
+          ).once.and_return(@cleaner)
+
+          subject.clean
+        end
+
+        it "should cache the cleaner" do
+          Compass::Commands::CleanProject.should_receive(:new).with(
+            Contao.root,
+            configuration_file: Contao.root.join('config', 'compass.rb')
+          ).once.and_return(@cleaner)
+
+          subject.clean
+          subject.clean
+        end
+
+        it "should call execute on the cleaner" do
+          @cleaner.should_receive(:execute).once
+
+          subject.send :clean
+        end
+      end
     end
   end
 end

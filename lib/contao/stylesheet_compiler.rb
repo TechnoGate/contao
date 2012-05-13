@@ -10,6 +10,17 @@ module TechnoGate
         super
       end
 
+      def clean
+        @cleaner ||= Compass::Commands::CleanProject.new(
+          Contao.root,
+          configuration_file: Contao.root.join('config', 'compass.rb')
+        )
+
+        @cleaner.execute
+
+        super
+      end
+
       protected
       def compile_assets
         @updater ||= Compass::Commands::UpdateProject.new(

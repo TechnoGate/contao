@@ -39,12 +39,19 @@ shared_examples_for "Compiler" do
     end
   end
 
-  describe "#clean" do
+  describe "#clean", :fakefs do
     it {should respond_to :clean}
 
     it "should be accessible at class level" do
       subject.class.any_instance.should_receive(:clean).once
       subject.class.clean
+    end
+
+    it "should remove the entire assets_public_path" do
+      stub_filesystem!
+      File.directory?("/root/public/resources").should be_true
+      subject.clean
+      File.directory?("/root/public/resources").should be_false
     end
   end
 

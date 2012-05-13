@@ -21,7 +21,7 @@ module TechnoGate
       end
 
       def clean
-
+        FileUtils.rm_rf Contao.expandify(Application.config.assets_public_path)
       end
 
       def self.clean
