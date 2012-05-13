@@ -8,11 +8,7 @@ module Guard
     # @param [Hash] options the custom Guard options
     def initialize(watchers = [], options = {})
       super
-    end
 
-    # Call once when Guard starts. Please override initialize method to init stuff.
-    # @raise [:task_has_failed] when start has failed
-    def start
       @javascript_compiler  = ::TechnoGate::Contao::JavascriptCompiler.new
       @stylesheet_compiler  = ::TechnoGate::Contao::StylesheetCompiler.new
     end

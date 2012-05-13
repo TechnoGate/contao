@@ -6,17 +6,13 @@ module Guard
       subject.class.superclass.should == ::Guard::Guard
     end
 
-    describe '#start' do
-      it {should respond_to :start}
-
+    describe '#init' do
       it "should create @javascript_compiler" do
-        subject.start
         subject.instance_variable_get(:@javascript_compiler).
           should be_instance_of TechnoGate::Contao::JavascriptCompiler
       end
 
       it "should create @stylesheet_compiler" do
-        subject.start
         subject.instance_variable_get(:@stylesheet_compiler).
           should be_instance_of TechnoGate::Contao::StylesheetCompiler
       end
