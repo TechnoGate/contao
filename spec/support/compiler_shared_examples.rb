@@ -39,6 +39,15 @@ shared_examples_for "Compiler" do
     end
   end
 
+  describe "#clean" do
+    it {should respond_to :clean}
+
+    it "should be accessible at class level" do
+      subject.class.any_instance.should_receive(:clean).once
+      subject.class.clean
+    end
+  end
+
   describe "#prepare_folders", :fakefs do
     it {should respond_to :prepare_folders}
 

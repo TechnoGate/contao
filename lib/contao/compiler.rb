@@ -20,6 +20,14 @@ module TechnoGate
         new.compile
       end
 
+      def clean
+
+      end
+
+      def self.clean
+        new.clean
+      end
+
       protected
       # Prepare folders
       def prepare_folders
