@@ -3,21 +3,6 @@ require 'spec_helper'
 module TechnoGate
   module Contao
     describe JavascriptCompiler do
-      before :each do
-        Contao.env  = @env  = :development
-        Contao.root = @root = "/root"
-        Application.configure do
-          config.javascripts_path   = ["vendor/assets/javascripts/javascript", "app/assets/javascripts/javascript"]
-          config.stylesheets_path   = 'app/assets/stylesheets'
-          config.images_path        = 'app/assets/images'
-          config.assets_public_path = 'public/resources'
-        end
-
-        silence_warnings do
-          Uglifier = mock("Uglifier").as_null_object
-        end
-      end
-
       it_should_behave_like "Compiler"
 
       describe "#compile_assets", :fakefs do
