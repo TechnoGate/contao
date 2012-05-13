@@ -46,15 +46,21 @@ module TechnoGate
 
       describe "#compile" do
         before :each do
-          subject.stub(:prepare_folders)
-          subject.stub(:compile_javascripts)
-          subject.stub(:create_hashed_assets)
+          JavascriptCompiler.any_instance.stub(:prepare_folders)
+          JavascriptCompiler.any_instance.stub(:compile_javascripts)
+          JavascriptCompiler.any_instance.stub(:create_hashed_assets)
         end
 
         it {should respond_to :compile}
 
+        it "should be accessible at class level" do
+          JavascriptCompiler.any_instance.should_receive(:compile).once
+          JavascriptCompiler.compile
+        end
+
         it "should return self" do
           subject.compile.should == subject
+          JavascriptCompiler.compile.should be_instance_of JavascriptCompiler
         end
 
         it "should have the following call stack" do
