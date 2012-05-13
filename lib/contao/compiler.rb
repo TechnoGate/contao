@@ -79,7 +79,7 @@ module TechnoGate
         manifest[key] = []
 
         all_files      = Dir["#{assets_public_path}/**/*.#{extension}"]
-        digested_files = all_files.select {|f| f =~ /^.+-[0-9a-f]{32}\.js$/}
+        digested_files = all_files.select {|f| f =~ /^.+-[0-9a-f]{32}\.#{extension}$/}
         non_digested_files = all_files - digested_files
 
         if Contao.env == :production

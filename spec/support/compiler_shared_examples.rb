@@ -120,47 +120,91 @@ shared_examples_for "Compiler" do
 
       @files = [
         '/root/public/resources/application.js',
-        '/root/public/resources/application-d41d8cd98f00b204e9800998ecf8427e.js'
+        '/root/public/resources/application-d41d8cd98f00b204e9800998ecf8427e.js',
+        '/root/public/resources/application.css',
+        '/root/public/resources/application-982436e5fe99465e0540d0cf38e7aff4.css',
       ].each {|f| File.open(f, 'w') {|fh| fh.write ""}}
 
       @manifest_path = '/root/public/resources/manifest.json'
     end
 
-    it "should a create a JSON manifest" do
-      subject.send(:generate_manifest_for, "javascripts", "js")
+    describe "stylesheets" do
+      it "should a create a JSON manifest" do
+        subject.send(:generate_manifest_for, "stylesheets", "css")
 
-      File.exists?(@manifest_path).should be_true
-    end
-
-    it "should create a JSON manifest with only non-digested files if the env is development" do
-      subject.send(:generate_manifest_for, "javascripts", "js")
-
-      manifest = JSON.parse(File.read(@manifest_path))
-      manifest.should have_key('javascripts')
-      manifest['javascripts'].should include('application.js')
-      manifest['javascripts'].should_not include('application-d41d8cd98f00b204e9800998ecf8427e.js')
-    end
-
-    it "should create a JSON manifest with only the digested file if the env is production" do
-      TechnoGate::Contao.env = :production
-      subject.send(:generate_manifest_for, "javascripts", "js")
-
-      manifest = JSON.parse(File.read(@manifest_path))
-      manifest.should have_key('javascripts')
-      manifest['javascripts'].should include('application-d41d8cd98f00b204e9800998ecf8427e.js')
-      manifest['javascripts'].should_not include('application.js')
-    end
-
-    it "should not touch anything present in the manifest" do
-      File.open(@manifest_path, 'w') do |manifest|
-        manifest.write({"stylesheets" => [1, 2, 3]}.to_json)
+        File.exists?(@manifest_path).should be_true
       end
 
-      subject.send(:generate_manifest_for, "javascripts", "js")
+      it "should create a JSON manifest with only non-digested files if the env is development" do
+        subject.send(:generate_manifest_for, "stylesheets", "css")
 
-      manifest = JSON.parse(File.read(@manifest_path))
-      manifest.should have_key('stylesheets')
-      manifest["stylesheets"].should == [1, 2, 3]
+        manifest = JSON.parse(File.read(@manifest_path))
+        manifest.should have_key('stylesheets')
+        manifest['stylesheets'].should include('application.css')
+        manifest['stylesheets'].should_not include('application-982436e5fe99465e0540d0cf38e7aff4.css')
+      end
+
+      it "should create a JSON manifest with only the digested file if the env is production" do
+        TechnoGate::Contao.env = :production
+        subject.send(:generate_manifest_for, "stylesheets", "css")
+
+        manifest = JSON.parse(File.read(@manifest_path))
+        manifest.should have_key('stylesheets')
+        manifest['stylesheets'].should include('application-982436e5fe99465e0540d0cf38e7aff4.css')
+        manifest['stylesheets'].should_not include('application.css')
+      end
+
+      it "should not touch anything present in the manifest" do
+        File.open(@manifest_path, 'w') do |manifest|
+          manifest.write({"javascripts" => [1, 2, 3]}.to_json)
+        end
+
+        subject.send(:generate_manifest_for, "stylesheets", "css")
+
+        manifest = JSON.parse(File.read(@manifest_path))
+        manifest.should have_key('javascripts')
+        manifest["javascripts"].should == [1, 2, 3]
+      end
+    end
+
+    describe "javascripts" do
+
+      it "should a create a JSON manifest" do
+        subject.send(:generate_manifest_for, "javascripts", "js")
+
+        File.exists?(@manifest_path).should be_true
+      end
+
+      it "should create a JSON manifest with only non-digested files if the env is development" do
+        subject.send(:generate_manifest_for, "javascripts", "js")
+
+        manifest = JSON.parse(File.read(@manifest_path))
+        manifest.should have_key('javascripts')
+        manifest['javascripts'].should include('application.js')
+        manifest['javascripts'].should_not include('application-d41d8cd98f00b204e9800998ecf8427e.js')
+      end
+
+      it "should create a JSON manifest with only the digested file if the env is production" do
+        TechnoGate::Contao.env = :production
+        subject.send(:generate_manifest_for, "javascripts", "js")
+
+        manifest = JSON.parse(File.read(@manifest_path))
+        manifest.should have_key('javascripts')
+        manifest['javascripts'].should include('application-d41d8cd98f00b204e9800998ecf8427e.js')
+        manifest['javascripts'].should_not include('application.js')
+      end
+
+      it "should not touch anything present in the manifest" do
+        File.open(@manifest_path, 'w') do |manifest|
+          manifest.write({"stylesheets" => [1, 2, 3]}.to_json)
+        end
+
+        subject.send(:generate_manifest_for, "javascripts", "js")
+
+        manifest = JSON.parse(File.read(@manifest_path))
+        manifest.should have_key('stylesheets')
+        manifest["stylesheets"].should == [1, 2, 3]
+      end
     end
   end
 end
