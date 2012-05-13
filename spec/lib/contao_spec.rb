@@ -58,6 +58,9 @@ module TechnoGate
 
     describe Contao::Application do
       subject { Contao::Application.instance }
+      let(:klass) { Contao::Application }
+
+      it_should_behave_like "Singleton"
 
       it "should be an open struct" do
         subject.class.superclass.should == OpenStruct
@@ -65,11 +68,6 @@ module TechnoGate
 
       it "should have a config as a superclass" do
         subject.config.class.should == OpenStruct
-      end
-
-      it "should be a singleton class" do
-        Contao::Application.instance.object_id.should ==
-          Contao::Application.instance.object_id
       end
 
       describe "config" do
