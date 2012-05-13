@@ -150,5 +150,17 @@ shared_examples_for "Compiler" do
       manifest['javascripts'].should include('application-d41d8cd98f00b204e9800998ecf8427e.js')
       manifest['javascripts'].should_not include('application.js')
     end
+
+    it "should not touch anything present in the manifest" do
+      File.open(@manifest_path, 'w') do |manifest|
+        manifest.write({"stylesheets" => [1, 2, 3]}.to_json)
+      end
+
+      subject.send(:generate_manifest_for, "javascripts", "js")
+
+      manifest = JSON.parse(File.read(@manifest_path))
+      manifest.should have_key('stylesheets')
+      manifest["stylesheets"].should == [1, 2, 3]
+    end
   end
 end
