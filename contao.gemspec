@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'oily_png'
   gem.add_dependency 'uglifier'
   gem.add_dependency 'activesupport'
+  gem.add_dependency 'guard'
 
   # Development dependencies
   gem.add_development_dependency 'rspec'

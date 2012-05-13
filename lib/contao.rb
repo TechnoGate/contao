@@ -71,3 +71,4 @@ end
 
 require 'contao/javascript_compiler'
 require 'contao/stylesheet_compiler'
+require 'contao/guard/assets'
