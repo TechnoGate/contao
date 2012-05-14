@@ -69,9 +69,13 @@ module TechnoGate
   end
 end
 
+# Contao
 require 'contao/notifier'
 require 'contao/javascript_compiler'
 require 'contao/stylesheet_compiler'
-require 'contao/guard/assets'
 
+# Guard
+require 'guard/assets'
+
+# Monkey patches
 require 'monkey_patches'
