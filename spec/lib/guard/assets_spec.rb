@@ -18,6 +18,20 @@ module Guard
       end
     end
 
+    describe "#start" do
+      before :each do
+        subject.stub(:run_all)
+      end
+
+      it {should respond_to :start}
+
+      it "should call :run_all" do
+        subject.should_receive(:run_all).once
+
+        subject.start
+      end
+    end
+
     describe '#run_all' do
       before :each do
         @stylesheet_compiler = mock('stylesheet_compiler', :clean => true)

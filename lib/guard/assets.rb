@@ -13,6 +13,12 @@ module Guard
       @stylesheet_compiler  = ::TechnoGate::Contao::StylesheetCompiler.new
     end
 
+    # Call once when Guard starts. Please override initialize method to init stuff.
+    # @raise [:task_has_failed] when start has failed
+    def start
+      run_all
+    end
+
     # Called when just `enter` is pressed
     # This method should be principally used for long action like running all specs/tests/...
     # @raise [:task_has_failed] when run_all has failed
