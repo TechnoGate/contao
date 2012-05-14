@@ -7,23 +7,6 @@ module TechnoGate
 
     class RootNotSet < RuntimeError; end
 
-    class Application < OpenStruct
-      include Singleton
-
-      def initialize
-        super
-        self.config = OpenStruct.new
-      end
-
-      def self.configure(&block)
-        instance.instance_eval(&block)
-      end
-
-      def self.config
-        instance.config
-      end
-    end
-
     # Get the currently running environment
     #
     # @return [Symbol] Currently running environment
@@ -70,6 +53,7 @@ module TechnoGate
 end
 
 # Contao
+require 'contao/application'
 require 'contao/notifier'
 require 'contao/javascript_compiler'
 require 'contao/stylesheet_compiler'
