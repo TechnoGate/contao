@@ -30,6 +30,7 @@ namespace :contao do
     Rake::Task['contao:fix_permissions'].invoke
     Rake::Task['contao:generate_localconfig'].invoke
     Rake::Task['contao:generate_htaccess'].invoke
+    Rake::Task['assets:precompile'].invoke
 
     TechnoGate::Contao::Notifier.notify("The contao folder has been bootstraped, Good Luck.", title: "Contao Bootstrap")
   end
