@@ -33,6 +33,14 @@ module TechnoGate
         Dir["#{File.expand_path '../tasks', __FILE__}/**/*.rake"].each {|f| load f}
       end
 
+      def name
+        File.basename TechnoGate::Contao.root
+      end
+
+      def self.name
+        instance.name
+      end
+
       protected
 
       # Return an array of arrays of files to link

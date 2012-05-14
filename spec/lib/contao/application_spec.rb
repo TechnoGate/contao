@@ -74,6 +74,18 @@ module TechnoGate
             ]
           end
         end
+
+        describe '#name' do
+          it {should respond_to :name}
+
+          it "should return the correct name" do
+            subject.name.should == 'root'
+          end
+
+          it "should be accessible at class level" do
+            Application.name.should == 'root'
+          end
+        end
       end
     end
   end
