@@ -53,6 +53,12 @@ module TechnoGate
             File.exists?('/root/public/non_existing_folder').should be_true
             File.exists?('/root/public/system/modules/some_extension').should be_true
           end
+
+          it "should be accessible at class level" do
+            subject.should_receive(:linkify).once
+
+            Application.linkify
+          end
         end
 
         describe '#exhaustive_list_of_files_to_link', :fakefs do

@@ -25,6 +25,10 @@ module TechnoGate
         end
       end
 
+      def self.linkify
+        instance.linkify
+      end
+
       protected
 
       # Return an array of arrays of files to link
