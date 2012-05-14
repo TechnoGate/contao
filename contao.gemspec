@@ -23,6 +23,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activesupport'
   gem.add_dependency 'guard'
   gem.add_dependency 'json'
+  gem.add_dependency 'parseconfig'
+  gem.add_dependency 'highline'
 
   # Development dependencies
   gem.add_development_dependency 'rspec'
