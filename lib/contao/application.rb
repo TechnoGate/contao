@@ -29,6 +29,10 @@ module TechnoGate
         instance.linkify
       end
 
+      def self.load_tasks
+        Dir["#{File.expand_path '../tasks', __FILE__}/**/*.rake"].each {|f| load f}
+      end
+
       protected
 
       # Return an array of arrays of files to link
