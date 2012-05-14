@@ -63,8 +63,10 @@ module TechnoGate
       # @param [Pathname | String] file_path
       def create_digest_for_file(file_path)
         digest = Digest::MD5.hexdigest File.read(file_path)
-        FileUtils.cp file_path,
-          "#{file_path.to_s.chomp(File.extname(file_path))}-#{digest}#{File.extname(file_path)}"
+        digested_file_path = "#{file_path.to_s.chomp(File.extname(file_path))}-#{digest}#{File.extname(file_path)}"
+        FileUtils.cp file_path, digested_file_path
+
+        digested_file_path
       end
 
       # This method generates a manifest of all generated files
