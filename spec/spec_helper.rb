@@ -27,6 +27,8 @@ RSpec.configure do |c|
       config.javascripts_path   = ["vendor/assets/javascripts/javascript", "app/assets/javascripts/javascript"]
       config.stylesheets_path   = 'app/assets/stylesheets'
       config.images_path        = 'app/assets/images'
+      config.contao_path        = 'contao'
+      config.contao_public_path = 'public'
       config.assets_public_path = 'public/resources'
     end
 
