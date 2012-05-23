@@ -83,6 +83,7 @@ namespace :contao do
       mysql_password = ask("What is the user's password", validate: /.+/, echo: false)
     end
     mysql_database = TechnoGate::Contao::Application.name
+    contao_env = TechnoGate::Contao.env
 
     localconfig = ERB.new(File.read(localconfig_template)).result(binding)
     File.open(localconfig_path, 'w') {|f| f.write localconfig }
