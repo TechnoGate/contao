@@ -4,7 +4,7 @@ require File.expand_path('../lib/contao/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Wael Nasreddine"]
   gem.email         = ["wael.nasreddine@gmail.com"]
-  gem.description   = %q{Contao integration}
+  gem.description   = %q{Contao Integration with Compass, Sass, Coffee-script, Rake, Guard with asset pre-compiler and asset-manifest generator}
   gem.summary       = gem.description
   gem.homepage      = ""
 
