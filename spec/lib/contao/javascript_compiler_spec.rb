@@ -11,7 +11,7 @@ module TechnoGate
 
           stub_filesystem!
 
-          @file_path   = "/root/app/assets/javascripts/javascript/file.js"
+          @file_path   = "/root/app/assets/javascripts/file.js"
           @app_js_path = "/root/public/resources/application.js"
 
           File.open(@file_path, 'w') do |file|

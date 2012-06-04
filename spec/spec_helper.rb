@@ -24,7 +24,7 @@ RSpec.configure do |c|
     ::TechnoGate::Contao.env  = @env  = :development
     ::TechnoGate::Contao.root = @root = "/root"
     ::TechnoGate::Contao::Application.configure do
-      config.javascripts_path   = ["vendor/assets/javascripts/javascript", "app/assets/javascripts/javascript"]
+      config.javascripts_path   = ['vendor/assets/javascripts', 'lib/assets/javascripts', 'app/assets/javascripts']
       config.stylesheets_path   = 'app/assets/stylesheets'
       config.images_path        = 'app/assets/images'
       config.contao_path        = 'contao'

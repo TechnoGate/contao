@@ -136,7 +136,7 @@ module Guard
       it "should call compile_javascript only if some javascript paths has changed" do
         subject.should_receive(:compile_javascript).once
 
-        subject.send :compile, ["app/assets/javascripts/javascript/file.js"]
+        subject.send :compile, ["app/assets/javascripts/file.js"]
       end
 
       it "should compile stylesheets only once" do
@@ -148,7 +148,7 @@ module Guard
       it "should compile javascripts only once" do
         subject.should_receive(:compile_javascript).once
 
-        subject.send :compile, ["app/assets/javascripts/javascript/file.css", "app/assets/javascripts/javascript/file2.css"]
+        subject.send :compile, ["app/assets/javascripts/file.css", "app/assets/javascripts/file2.css"]
       end
     end
 
@@ -176,7 +176,7 @@ module Guard
 
     describe "#is_javascript?" do
       it "should return true for stylesheet file" do
-        subject.send(:is_javascript?, "app/assets/javascripts/javascript/file.js").should be_true
+        subject.send(:is_javascript?, "app/assets/javascripts/file.js").should be_true
       end
 
       it "should return false for non-stylesheet files" do

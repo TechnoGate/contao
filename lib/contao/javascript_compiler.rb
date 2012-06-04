@@ -19,7 +19,8 @@ module TechnoGate
       # Application.config.assets_public_path/application.js and it uglifies
       # only if the environment is equal to :production
       def compile_assets
-        tmp_app_js = "/tmp/application-#{Time.now.usec}.js"
+        tmp_app_js = Contao.root.join('tmp/application.js')
+        FileUtils.mkdir_p File.dirname(tmp_app_js)
 
         File.open(tmp_app_js, 'w') do |compressed|
           Application.config.javascripts_path.each do |src_path|
