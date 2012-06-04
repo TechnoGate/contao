@@ -42,7 +42,7 @@ module TechnoGate
             subject.should_receive(:exhaustive_list_of_files_to_link).with(
               Contao.expandify(Application.config.contao_path),
               Contao.expandify(Application.config.contao_public_path)
-            ).once
+            ).once.and_return []
 
             subject.linkify
           end
