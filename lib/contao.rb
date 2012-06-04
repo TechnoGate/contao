@@ -55,6 +55,7 @@ end
 # Contao
 require 'contao/application'
 require 'contao/notifier'
+require 'contao/coffeescript_compiler'
 require 'contao/javascript_compiler'
 require 'contao/stylesheet_compiler'
 

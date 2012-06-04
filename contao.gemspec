@@ -25,6 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'json'
   gem.add_dependency 'parseconfig'
   gem.add_dependency 'highline'
+  gem.add_dependency 'coffee-script'
 
   # Development dependencies
   gem.add_development_dependency 'rspec'
