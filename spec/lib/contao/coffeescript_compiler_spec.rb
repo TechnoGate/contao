@@ -52,6 +52,20 @@ module TechnoGate
             "/root/tmp/compiled_javascript/file.js"
         end
       end
+
+      describe "#clean", :fakefs do
+        before :each do
+          stub_filesystem!
+
+          FileUtils.mkdir_p '/root/tmp/compiled_javascript'
+        end
+
+        it "should remove the temporary javascript compiled files" do
+          subject.clean
+
+          File.exists?('/root/tmp/compiled_javascript').should be_false
+        end
+      end
     end
   end
 end
