@@ -39,6 +39,13 @@ module TechnoGate
         end
       end
 
+      describe "#javascripts_path" do
+        it "should return the configured path as well as the temporary javascript path" do
+          subject.send(:javascripts_path).should ==
+            Application.config.javascripts_path + [Contao.root.join('tmp/compiled_javascript')]
+        end
+      end
+
       describe "#create_hashed_assets", :fakefs do
         before :each do
           stub_filesystem!

@@ -23,7 +23,7 @@ module TechnoGate
         FileUtils.mkdir_p File.dirname(tmp_app_js)
 
         File.open(tmp_app_js, 'w') do |compressed|
-          Application.config.javascripts_path.each do |src_path|
+          javascripts_path.each do |src_path|
             Dir["#{Contao.expandify(src_path)}/**/*.js"].sort.each do |f|
               if TechnoGate::Contao.env == :production
                 compressed.write(Uglifier.new.compile(File.read(f)))
@@ -37,6 +37,10 @@ module TechnoGate
         end
 
         FileUtils.mv tmp_app_js, application_js_path
+      end
+
+      def javascripts_path
+        Application.config.javascripts_path + [Contao.root.join('tmp/compiled_javascript')]
       end
 
       # This function creates a hashed version of the assets
