@@ -41,10 +41,15 @@ namespace :contao do
     path = File.expand_path "../../../contao_patches/#{TechnoGate::Contao.env}", __FILE__
     Dir["#{path}/**/*.patch"].each do |patch|
       TechnoGate::Contao::Notifier.notify("Applying patch #{File.basename patch}", title: "Contao Bootstrap")
-      system <<-CMD
+      result = system <<-CMD
         cd #{TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path)}
-        patch -Nfp1 -i #{patch}
+        patch -Nfp1 -i #{patch} --no-backup-if-mismatch
       CMD
+
+      if !result
+        TechnoGate::Contao::Notifier.notify("Patch #{File.basename patch} failed to apply", title: "Contao Bootstrap")
+        abort "Please fix patches before bootstrapping"
+      end
     end
   end
 
