@@ -1,4 +1,7 @@
 require 'yaml'
+require 'ostruct'
+require 'singleton'
+require 'contao/core_ext/object'
 
 module TechnoGate
   module Contao
