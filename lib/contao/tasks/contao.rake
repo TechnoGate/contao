@@ -27,11 +27,11 @@ namespace :contao do
     FileUtils.mkdir_p public.join('system/logs')
     File.open(public.join('sitemap.xml'), 'w') {|f| f.write ''}
 
-    Rake::Task['contao:fix_permissions'].invoke
     Rake::Task['contao:generate_localconfig'].invoke
     Rake::Task['contao:generate_htaccess'].invoke
     Rake::Task['contao:apply_patches'].invoke
     Rake::Task['assets:precompile'].invoke
+    Rake::Task['contao:fix_permissions'].invoke
 
     TechnoGate::Contao::Notifier.notify("The contao folder has been bootstraped, Good Luck.", title: "Contao Bootstrap")
   end
@@ -64,9 +64,12 @@ namespace :contao do
       'system/scripts',
       'system/tmp',
       'system/cache',
+      'system/config',
     ].map {|p| public.join p}.reject {|p| !File.exists? p}
 
     FileUtils.chmod 0777, paths
+
+    FileUtils.chmod 0666, Dir["#{public}/system/config/**/*.php"]
 
     Dir["#{public}/system/modules/efg/**/*"].each do |f|
       if File.directory?(f)
