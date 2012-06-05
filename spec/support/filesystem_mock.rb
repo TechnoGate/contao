@@ -1,6 +1,7 @@
 def stub_filesystem!(options = {})
   [
 
+    '/root/my_awesome_project/config',
     '/root/my_awesome_project/app/assets/javascripts',
     '/root/my_awesome_project/app/assets/stylesheets',
     '/root/my_awesome_project/app/assets/images',
@@ -19,6 +20,7 @@ def stub_filesystem!(options = {})
   end
 
   stub_global_config_file!(options[:global_config] || {})
+  stub_config_application!(options[:application_name])
 end
 
 def stub_global_config_file!(config = {})
@@ -32,5 +34,26 @@ def stub_global_config_file!(config = {})
   FileUtils.mkdir_p File.dirname(config_file)
   File.open(config_file, 'w') do |file|
     file.write YAML.dump(config)
+  end
+end
+
+def stub_config_application!(application_name = 'my_awesome_project')
+  File.open('/root/my_awesome_project/config/application.rb', 'w') do |f|
+    f.write(<<-EOS)
+require File.expand_path('../boot', __FILE__)
+
+# Initialize the application
+Dir["#{TechnoGate::Contao.root.join('config', 'initializers')}/**/*.rb"].each {|f| require f}
+
+TechnoGate::Contao::Application.configure do
+  config.application_name   = '#{application_name}'
+  config.javascripts_path   = ["vendor/assets/javascripts", "lib/assets/javascripts", "app/assets/javascripts"]
+  config.stylesheets_path   = 'app/assets/stylesheets'
+  config.images_path        = 'app/assets/images'
+  config.contao_path        = 'contao'
+  config.contao_public_path = 'public'
+  config.assets_public_path = 'public/resources'
+end
+    EOS
   end
 end

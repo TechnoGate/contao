@@ -11,7 +11,7 @@ module TechnoGate
         }
 
         before :each do
-          @path = '/path/to/application'
+          @path = '/root/my_awesome_project'
         end
 
         it_should_behave_like "Generator"
@@ -31,12 +31,17 @@ module TechnoGate
 
         describe "#rename_project", :fakefs do
           before :each do
-
+            stub_filesystem!(:application_name => 'contao_template')
           end
 
           it {should respond_to :rename_project}
 
+          it "should rename the application" do
+            subject.send :rename_project
 
+            File.read('/root/my_awesome_project/config/application.rb').should =~
+              /config\.application_name\s+=\s+'my_awesome_project'/
+          end
         end
       end
     end
