@@ -1,6 +1,7 @@
 namespace :assets do
   desc "Compile javascript"
   task :javascript do
+    TechnoGate::Contao::CoffeescriptCompiler.compile
     TechnoGate::Contao::JavascriptCompiler.compile
   end
 
@@ -12,6 +13,7 @@ namespace :assets do
   desc "Clean assets"
   task :clean do
     TechnoGate::Contao::StylesheetCompiler.clean
+    TechnoGate::Contao::CoffeescriptCompiler.clean
     TechnoGate::Contao::JavascriptCompiler.clean
   end
 
