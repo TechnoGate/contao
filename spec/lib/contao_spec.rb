@@ -33,10 +33,8 @@ module TechnoGate
       end
 
       it "should set the @@root" do
-        mock("root").tap do |root|
-          subject.root = root
-          subject.class_variable_get(:@@root).should == Pathname.new(root).expand_path
-        end
+        subject.root = '~/Desktop'
+        subject.class_variable_get(:@@root).should == Pathname.new('~/Desktop').expand_path
       end
     end
 
