@@ -36,7 +36,7 @@ module TechnoGate
       end
 
       def compute_destination_filename(src_path, file)
-        dest = "#{compiled_javascript_path}/"
+        dest = "#{compiled_javascript_path}/#{src_path.gsub('/', '_')}/"
         dest << file.gsub(/.*#{Regexp.escape src_path}\//, '').gsub(/\.coffee$/, '')
         dest << '.js' unless File.extname(dest) == '.js'
         dest

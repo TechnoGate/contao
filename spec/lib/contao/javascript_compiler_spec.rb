@@ -42,7 +42,14 @@ module TechnoGate
       describe "#javascripts_path" do
         it "should return the configured path as well as the temporary javascript path" do
           subject.send(:javascripts_path).should ==
-            Application.config.javascripts_path + [Contao.root.join('tmp/compiled_javascript')]
+            [
+              'tmp/compiled_javascript/vendor_assets_javascripts',
+              'tmp/compiled_javascript/lib_assets_javascripts',
+              'tmp/compiled_javascript/app_assets_javascripts',
+              'vendor/assets/javascripts',
+              'lib/assets/javascripts',
+              'app/assets/javascripts',
+            ]
         end
       end
 
