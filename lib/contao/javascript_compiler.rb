@@ -40,8 +40,9 @@ module TechnoGate
       end
 
       def javascripts_path
-        Application.config.javascripts_path.map { |p| "tmp/compiled_javascript/#{p.gsub('/', '_')}" } +
-          Application.config.javascripts_path
+        Application.config.javascripts_path.map do |path|
+          ["tmp/compiled_javascript/#{path.gsub('/', '_')}", path]
+        end.flatten
       end
 
       # This function creates a hashed version of the assets

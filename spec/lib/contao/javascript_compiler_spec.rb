@@ -44,10 +44,10 @@ module TechnoGate
           subject.send(:javascripts_path).should ==
             [
               'tmp/compiled_javascript/vendor_assets_javascripts',
-              'tmp/compiled_javascript/lib_assets_javascripts',
-              'tmp/compiled_javascript/app_assets_javascripts',
               'vendor/assets/javascripts',
+              'tmp/compiled_javascript/lib_assets_javascripts',
               'lib/assets/javascripts',
+              'tmp/compiled_javascript/app_assets_javascripts',
               'app/assets/javascripts',
             ]
         end
