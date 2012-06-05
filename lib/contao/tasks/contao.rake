@@ -30,12 +30,25 @@ namespace :contao do
     Rake::Task['contao:fix_permissions'].invoke
     Rake::Task['contao:generate_localconfig'].invoke
     Rake::Task['contao:generate_htaccess'].invoke
+    Rake::Task['contao:apply_patches'].invoke
     Rake::Task['assets:precompile'].invoke
 
     TechnoGate::Contao::Notifier.notify("The contao folder has been bootstraped, Good Luck.", title: "Contao Bootstrap")
   end
 
-  desc "Fix permissions"
+  desc 'Apply Patches'
+  task :apply_patches do
+    path = File.expand_path "../../../contao_patches/#{TechnoGate::Contao.env}", __FILE__
+    Dir["#{path}/**/*.patch"].each do |patch|
+      TechnoGate::Contao::Notifier.notify("Applying patch #{File.basename patch}", title: "Contao Bootstrap")
+      system <<-CMD
+        cd #{TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path)}
+        patch -Nfp1 -i #{patch}
+      CMD
+    end
+  end
+
+  desc 'Fix permissions'
   task :fix_permissions do
     require 'fileutils'
 

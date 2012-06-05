@@ -1,0 +1,73 @@
+This patch tells Apache to disable browser caching by asking the browser to
+load HTML/assets on each request
+
+diff -Naur a/.htaccess b/.htaccess
+--- a/.htaccess	2012-06-05 14:36:55.000000000 +0200
++++ b/.htaccess	2012-06-05 14:40:32.000000000 +0200
+@@ -119,36 +119,42 @@
+ ##
+ <IfModule mod_expires.c>
+   ExpiresActive on
+-  ExpiresByType text/cache-manifest           "access plus 0 seconds"
+-  ExpiresByType text/html                     "access plus 0 seconds"
++  ExpiresByType text/cache-manifest           "access"
++  ExpiresByType text/html                     "access"
+   # Data
+-  ExpiresByType text/xml                      "access plus 0 seconds"
+-  ExpiresByType application/xml               "access plus 0 seconds"
+-  ExpiresByType application/json              "access plus 0 seconds"
++  ExpiresByType text/xml                      "access"
++  ExpiresByType application/xml               "access"
++  ExpiresByType application/json              "access"
+   # Feed
+-  ExpiresByType application/rss+xml           "access plus 1 hour"
+-  ExpiresByType application/atom+xml          "access plus 1 hour"
++  ExpiresByType application/rss+xml           "access"
++  ExpiresByType application/atom+xml          "access"
+   # Media: images, video, audio
+-  ExpiresByType image/gif                     "access plus 1 month"
+-  ExpiresByType image/png                     "access plus 1 month"
+-  ExpiresByType image/jpg                     "access plus 1 month"
+-  ExpiresByType image/jpeg                    "access plus 1 month"
+-  ExpiresByType image/x-icon                  "access plus 1 month"
+-  ExpiresByType video/ogg                     "access plus 1 month"
+-  ExpiresByType audio/ogg                     "access plus 1 month"
+-  ExpiresByType video/mp4                     "access plus 1 month"
+-  ExpiresByType video/webm                    "access plus 1 month"
++  ExpiresByType image/gif                     "access"
++  ExpiresByType image/png                     "access"
++  ExpiresByType image/jpg                     "access"
++  ExpiresByType image/jpeg                    "access"
++  ExpiresByType image/x-icon                  "access"
++  ExpiresByType video/ogg                     "access"
++  ExpiresByType audio/ogg                     "access"
++  ExpiresByType video/mp4                     "access"
++  ExpiresByType video/webm                    "access"
+   # HTC files  (css3pie)
+-  ExpiresByType text/x-component              "access plus 1 month"
++  ExpiresByType text/x-component              "access"
+   # Webfonts
+-  ExpiresByType application/x-font-ttf        "access plus 1 month"
+-  ExpiresByType font/opentype                 "access plus 1 month"
+-  ExpiresByType application/x-font-woff       "access plus 1 month"
+-  ExpiresByType image/svg+xml                 "access plus 1 month"
+-  ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
++  ExpiresByType application/x-font-ttf        "access"
++  ExpiresByType font/opentype                 "access"
++  ExpiresByType application/x-font-woff       "access"
++  ExpiresByType image/svg+xml                 "access"
++  ExpiresByType application/vnd.ms-fontobject "access"
+   # CSS and JavaScript
+-  ExpiresByType text/css                      "access plus 1 year"
+-  ExpiresByType application/javascript        "access plus 1 year"
++  ExpiresByType text/css                      "access"
++  ExpiresByType application/javascript        "access"
++</IfModule>
++
++# Reset the header
++<IfModule mod_headers.c>
++  Header unset Cache-Control
++  Header append Cache-Control must-revalidate
+ </IfModule>
+ 
+ ##
