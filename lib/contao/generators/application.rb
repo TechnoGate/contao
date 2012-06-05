@@ -10,6 +10,10 @@ module TechnoGate
         def generate
           clone_template
           rename_project
+          run_bundle_install
+          run_cap_multistage_setup
+          commit_everything
+          replace_origin_with_template
         end
 
         protected
@@ -22,6 +26,37 @@ module TechnoGate
           config = File.read(config_application_path)
           File.open(config_application_path, 'w') do |file|
             file.write config.gsub(/contao_template/, project_name)
+          end
+        end
+
+        def run_bundle_install
+          Dir.chdir project_path do
+            Contao::System.safe_system 'bundle', 'install'
+          end
+        end
+
+        def run_cap_multistage_setup
+          Dir.chdir project_path do
+            Contao::System.safe_system 'bundle', 'exec', 'cap', 'multistage:setup'
+          end
+        end
+
+        def commit_everything
+          Dir.chdir project_path do
+            Contao::System.safe_system('git', 'add', '-A', '.')
+            Contao::System.safe_system(
+              'git',
+              'commit',
+              '-m',
+              'Import generated files inside the repository'
+            )
+          end
+        end
+
+        def replace_origin_with_template
+          Dir.chdir project_path do
+            Contao::System.safe_system 'git', 'remote', 'rm', 'origin'
+            Contao::System.safe_system 'git', 'remote', 'add', 'template', REPO_URL
           end
         end
 

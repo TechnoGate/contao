@@ -20,11 +20,20 @@ module TechnoGate
           before :each do
             klass.any_instance.stub :clone_template
             klass.any_instance.stub :rename_project
+            klass.any_instance.stub :run_bundle_install
+            klass.any_instance.stub :run_cap_multistage_setup
+            klass.any_instance.stub :commit_everything
+            klass.any_instance.stub :replace_origin_with_template
+            System.stub(:system)
           end
 
-          it "should clone the repository and then rename the project" do
+          it "should have the following call stack" do
             subject.should_receive(:clone_template).once.ordered
             subject.should_receive(:rename_project).once.ordered
+            subject.should_receive(:run_bundle_install).once.ordered
+            subject.should_receive(:run_cap_multistage_setup).once.ordered
+            subject.should_receive(:commit_everything).once.ordered
+            subject.should_receive(:replace_origin_with_template).once.ordered
 
             subject.generate
           end
@@ -58,6 +67,104 @@ module TechnoGate
 
             File.read('/root/my_awesome_project/config/application.rb').should =~
               /config\.application_name\s+=\s+'my_awesome_project'/
+          end
+        end
+
+        describe "#run_bundle_install", :fakefs do
+          before :each do
+            stub_filesystem!
+          end
+
+          it {should respond_to :run_bundle_install}
+
+          it "should change the folder to the path" do
+            Dir.should_receive(:chdir).once
+
+            subject.send :run_bundle_install
+          end
+
+          it "should run bundle install" do
+            System.should_receive(:system).with('bundle', 'install').once.and_return true
+
+            subject.send :run_bundle_install
+          end
+        end
+
+        describe "#run_cap_multistage_setup", :fakefs do
+          before :each do
+            stub_filesystem!
+          end
+
+          it {should respond_to :run_cap_multistage_setup}
+
+          it "should change the folder to the path" do
+            Dir.should_receive(:chdir).once
+
+            subject.send :run_cap_multistage_setup
+          end
+
+          it "should run cap multistage:setup" do
+            System.should_receive(:system).with(
+              'bundle',
+              'exec',
+              'cap',
+              'multistage:setup'
+            ).once.and_return true
+
+            subject.send :run_cap_multistage_setup
+          end
+        end
+
+        describe "#commit_everything", :fakefs do
+          before :each do
+            stub_filesystem!
+          end
+
+          it {should respond_to :commit_everything}
+
+          it "should change the folder to the path" do
+            Dir.should_receive(:chdir).once
+
+            subject.send :commit_everything
+          end
+
+          it "should run git commit -am 'Generated project'" do
+            System.should_receive(:system).with('git', 'add', '-A', '.').once.ordered.and_return true
+            System.should_receive(:system).with(
+              'git',
+              'commit',
+              '-m',
+              'Import generated files inside the repository'
+            ).once.ordered.and_return true
+
+            subject.send :commit_everything
+          end
+        end
+
+        describe '#replace_origin_with_template', :fakefs do
+          before :each do
+            stub_filesystem!
+          end
+
+          it {should respond_to :replace_origin_with_template}
+
+          it "should change the folder to the path" do
+            Dir.should_receive(:chdir).once
+
+            subject.send :replace_origin_with_template
+          end
+
+          it "should replace origin with template" do
+            System.should_receive(:system).with('git', 'remote', 'rm', 'origin').once.ordered.and_return true
+            System.should_receive(:system).with(
+              'git',
+              'remote',
+              'add',
+              'template',
+              Application::REPO_URL
+            ).once.ordered.and_return true
+
+            subject.send :replace_origin_with_template
           end
         end
       end
