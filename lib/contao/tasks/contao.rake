@@ -83,30 +83,31 @@ namespace :contao do
 
   desc "Generate the localconfig.php"
   task :generate_localconfig do
-    require 'parseconfig'
+    require 'active_support/core_ext/object/blank'
+    config = TechnoGate::Contao::Application.config.global
 
-    my_cnf_path = File.expand_path("#{ENV['HOME']}/.my.cnf")
-    localconfig_template = TechnoGate::Contao.expandify('config/examples/localconfig.php.erb')
-    localconfig_path = TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path).join('system/config/localconfig.php')
-
-    if File.exists?(my_cnf_path)
-      my_cnf = ParseConfig.new(my_cnf_path)
-      mysql_host = my_cnf.params['client']['host']
-      mysql_user = my_cnf.params['client']['user']
-      mysql_password = my_cnf.params['client']['password']
+    if !config && config.install_password.blank? || config.encryption_key.blank?
+      message = <<-EOS
+        You did not set the install password, and the encryption key in your
+        #{ENV['HOME']}/.contao/config.yml, I cannot generate a localconfig
+        since the required configuration keys are missing.
+      EOS
+      message.gsub!(/ [ ]+/, ' ').gsub!(/\n/, '').gsub!(/^ /, '')
+      TechnoGate::Contao::Notifier.warn(message, title: "Contao Bootstrap")
     else
-      puts "Please add these details to #{my_cnf_path}"
-      mysql_host = ask("What host is mysql running on", default: 'localhost', validate: /.+/)
-      mysql_user = ask("What user to use with mysql", validate: /.+/)
-      mysql_password = ask("What is the user's password", validate: /.+/, echo: false)
+      config = config.clone
+      config.contao_env = TechnoGate::Contao.env
+      config.application_name = TechnoGate::Contao::Application.name
+      config.mysql.database = config.application_name
+
+      localconfig_template = TechnoGate::Contao.expandify('config/examples/localconfig.php.erb')
+      localconfig_path = TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path).join('system/config/localconfig.php')
+
+      localconfig = ERB.new(File.read(localconfig_template)).result(binding)
+      File.open(localconfig_path, 'w') {|f| f.write localconfig }
+
+      TechnoGate::Contao::Notifier.notify("The configuration file localconfig.php was generated successfully.", title: "Contao Bootstrap")
     end
-    mysql_database = TechnoGate::Contao::Application.name
-    contao_env = TechnoGate::Contao.env
-
-    localconfig = ERB.new(File.read(localconfig_template)).result(binding)
-    File.open(localconfig_path, 'w') {|f| f.write localconfig }
-
-    TechnoGate::Contao::Notifier.notify("The configuration file localconfig.php was generated successfully.", title: "Contao Bootstrap")
   end
 
   desc "Generate the htaccess file"
