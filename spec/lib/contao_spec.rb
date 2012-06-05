@@ -42,13 +42,13 @@ module TechnoGate
 
     describe '#expandify' do
       before :each do
-        subject.root = '/root'
+        subject.root = '/root/my_awesome_project'
       end
 
       it {should respond_to :expandify}
 
       it "should expand the path if it's relative" do
-        subject.expandify('app').to_s.should == '/root/app'
+        subject.expandify('app').to_s.should == '/root/my_awesome_project/app'
       end
 
       it "should not expand an expanded path" do

@@ -91,7 +91,7 @@ module TechnoGate
         before :each do
           stub_filesystem!
 
-          @app_css_path = "/root/public/resources/application.css"
+          @app_css_path = "/root/my_awesome_project/public/resources/application.css"
 
           File.open(@app_css_path, 'w') do |file|
             file.write('compiled css')

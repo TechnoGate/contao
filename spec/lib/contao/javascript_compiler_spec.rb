@@ -11,8 +11,8 @@ module TechnoGate
 
           stub_filesystem!
 
-          @file_path   = "/root/app/assets/javascripts/file.js"
-          @app_js_path = "/root/public/resources/application.js"
+          @file_path   = "/root/my_awesome_project/app/assets/javascripts/file.js"
+          @app_js_path = "/root/my_awesome_project/public/resources/application.js"
 
           File.open(@file_path, 'w') do |file|
             file.write("not compiled js")
@@ -57,7 +57,7 @@ module TechnoGate
         before :each do
           stub_filesystem!
 
-          @app_js_path = "/root/public/resources/application.js"
+          @app_js_path = "/root/my_awesome_project/public/resources/application.js"
 
           File.open(@app_js_path, 'w') do |file|
             file.write('compiled js')

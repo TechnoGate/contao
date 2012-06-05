@@ -1,14 +1,14 @@
 def stub_filesystem!(options = {})
   [
 
-    '/root/app/assets/javascripts',
-    '/root/app/assets/stylesheets',
-    '/root/app/assets/images',
-    '/root/contao/non_existing_folder',
-    '/root/contao/system/modules/some_extension',
-    '/root/public/resources',
-    '/root/public/system/modules/frontend',
-    '/root/vendor/assets/javascripts',
+    '/root/my_awesome_project/app/assets/javascripts',
+    '/root/my_awesome_project/app/assets/stylesheets',
+    '/root/my_awesome_project/app/assets/images',
+    '/root/my_awesome_project/contao/non_existing_folder',
+    '/root/my_awesome_project/contao/system/modules/some_extension',
+    '/root/my_awesome_project/public/resources',
+    '/root/my_awesome_project/public/system/modules/frontend',
+    '/root/my_awesome_project/vendor/assets/javascripts',
     '/tmp',
 
   ].each do |folder|

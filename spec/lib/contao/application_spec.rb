@@ -37,8 +37,8 @@ module TechnoGate
         it "should actually link the files" do
           subject.linkify
 
-          File.exists?('/root/public/non_existing_folder').should be_true
-          File.exists?('/root/public/system/modules/some_extension').should be_true
+          File.exists?('/root/my_awesome_project/public/non_existing_folder').should be_true
+          File.exists?('/root/my_awesome_project/public/system/modules/some_extension').should be_true
         end
 
         it "should be accessible at class level" do
@@ -50,10 +50,10 @@ module TechnoGate
 
       describe '#exhaustive_list_of_files_to_link' do
         it "should return the correct list of files" do
-          list = subject.send :exhaustive_list_of_files_to_link, '/root/contao', '/root/public'
+          list = subject.send :exhaustive_list_of_files_to_link, '/root/my_awesome_project/contao', '/root/my_awesome_project/public'
           list.should == [
-            ['/root/contao/non_existing_folder', '/root/public/non_existing_folder'],
-            ['/root/contao/system/modules/some_extension', '/root/public/system/modules/some_extension']
+            ['/root/my_awesome_project/contao/non_existing_folder', '/root/my_awesome_project/public/non_existing_folder'],
+            ['/root/my_awesome_project/contao/system/modules/some_extension', '/root/my_awesome_project/public/system/modules/some_extension']
           ]
         end
       end
@@ -69,20 +69,28 @@ module TechnoGate
           end
 
           it "should return the correct name" do
-            subject.name.should == 'root'
+            subject.name.should == 'my_awesome_project'
           end
 
           it "should be accessible at class level" do
-            Application.name.should == 'root'
+            Application.name.should == 'my_awesome_project'
           end
         end
 
-        it "should be my_awesome_project" do
-          subject.name.should == 'my_awesome_project'
-        end
+        describe "with it being set in the configuration" do
+          before :each do
+            TechnoGate::Contao::Application.configure do
+              config.application_name = 'my_super_awesome_project'
+            end
+          end
 
-        it "should be accessible at class level" do
-          Application.name.should == 'my_awesome_project'
+          it "should be my_awesome_project" do
+            subject.name.should == 'my_super_awesome_project'
+          end
+
+          it "should be accessible at class level" do
+            Application.name.should == 'my_super_awesome_project'
+          end
         end
       end
     end

@@ -13,7 +13,7 @@ shared_examples_for "Compiler" do
 
     it "should set the manifest_path as an instance variable" do
       subject.instance_variable_get(:@manifest_path).should ==
-        Pathname('/root/public/resources/manifest.json')
+        Pathname('/root/my_awesome_project/public/resources/manifest.json')
     end
   end
 
@@ -67,9 +67,9 @@ shared_examples_for "Compiler" do
 
     it "should remove the entire assets_public_path" do
       stub_filesystem!
-      File.directory?("/root/public/resources").should be_true
+      File.directory?("/root/my_awesome_project/public/resources").should be_true
       subject.clean
-      File.directory?("/root/public/resources").should be_false
+      File.directory?("/root/my_awesome_project/public/resources").should be_false
     end
   end
 
@@ -78,7 +78,7 @@ shared_examples_for "Compiler" do
 
     it "should create the js_path" do
       subject.send :prepare_folders
-      File.directory?("/root/public/resources")
+      File.directory?("/root/my_awesome_project/public/resources")
     end
   end
 
@@ -94,13 +94,13 @@ shared_examples_for "Compiler" do
     before :each do
       stub_filesystem!
 
-      @file_path = '/root/file.something.extension'
+      @file_path = '/root/my_awesome_project/file.something.extension'
       File.open(@file_path, 'w') do |f|
         f.write('some data')
       end
 
       @digest = Digest::MD5.hexdigest('some data')
-      @digested_file_path = "/root/file.something-#{@digest}.extension"
+      @digested_file_path = "/root/my_awesome_project/file.something-#{@digest}.extension"
     end
 
     it "should be able to create a hashed file" do
@@ -119,13 +119,13 @@ shared_examples_for "Compiler" do
       stub_filesystem!
 
       @files = [
-        '/root/public/resources/application.js',
-        '/root/public/resources/application-d41d8cd98f00b204e9800998ecf8427e.js',
-        '/root/public/resources/application.css',
-        '/root/public/resources/application-982436e5fe99465e0540d0cf38e7aff4.css',
+        '/root/my_awesome_project/public/resources/application.js',
+        '/root/my_awesome_project/public/resources/application-d41d8cd98f00b204e9800998ecf8427e.js',
+        '/root/my_awesome_project/public/resources/application.css',
+        '/root/my_awesome_project/public/resources/application-982436e5fe99465e0540d0cf38e7aff4.css',
       ].each {|f| File.open(f, 'w') {|fh| fh.write ""}}
 
-      @manifest_path = '/root/public/resources/manifest.json'
+      @manifest_path = '/root/my_awesome_project/public/resources/manifest.json'
     end
 
     describe "stylesheets" do

@@ -22,7 +22,7 @@ RSpec.configure do |c|
 
   c.before :each do
     ::TechnoGate::Contao.env  = @env  = :development
-    ::TechnoGate::Contao.root = @root = "/root"
+    ::TechnoGate::Contao.root = @root = "/root/my_awesome_project"
     ::TechnoGate::Contao::Application.configure do
       config.application_name   = 'my_awesome_project'
       config.javascripts_path   = ['vendor/assets/javascripts', 'lib/assets/javascripts', 'app/assets/javascripts']
