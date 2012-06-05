@@ -7,11 +7,15 @@ module TechnoGate
       class Application < Base
         REPO_URL = 'https://github.com/TechnoGate/contao_template.git'
 
+        def generate
+          clone_template
+          rename_project
+        end
+
         protected
         def clone_template
-          git_args = "clone --recursive #{REPO_URL} "
-          git_args << project_path
-          Contao::System.safe_system 'git', git_args
+          git_args = "clone --recursive #{REPO_URL} #{project_path}"
+          Contao::System.safe_system 'git', *git_args.split(' ')
         end
 
         def rename_project

@@ -16,13 +16,30 @@ module TechnoGate
 
         it_should_behave_like "Generator"
 
+        describe "#generate" do
+          before :each do
+            klass.any_instance.stub :clone_template
+            klass.any_instance.stub :rename_project
+          end
+
+          it "should clone the repository and then rename the project" do
+            subject.should_receive(:clone_template).once.ordered
+            subject.should_receive(:rename_project).once.ordered
+
+            subject.generate
+          end
+        end
+
         describe "#clone_template" do
           it {should respond_to :clone_template}
 
           it "should clone the repository to path provided to the initializer" do
             System.should_receive(:system).with(
               'git',
-              "clone --recursive #{Application::REPO_URL} #{@path}"
+              'clone',
+              '--recursive',
+              Application::REPO_URL,
+              @path
             ).once.and_return true
 
             subject.send :clone_template

@@ -4,7 +4,6 @@ module TechnoGate
       class ErrorDuringExecution < RuntimeError; end
 
       def self.system cmd, *args
-        puts "#{cmd} #{args*' '}" if ARGV.verbose?
         fork do
           yield if block_given?
           args.collect!{|arg| arg.to_s}
