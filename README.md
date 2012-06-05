@@ -91,6 +91,7 @@ detailed information
 To be able to develop with this version of Contao, you first need to
 understand how it actually works.
 
+TODO: Continue this section
 
 ## Database name
 
