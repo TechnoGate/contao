@@ -5,7 +5,19 @@ Gem::Specification.new do |gem|
   gem.authors       = ['Wael Nasreddine']
   gem.email         = ['wael.nasreddine@gmail.com']
   gem.description   = %q{Contao Integration with Compass, Sass, Coffee-script, Rake, Guard with asset pre-compiler and asset-manifest generator}
-  gem.summary       = gem.description
+  gem.summary       = <<-EOS
+This gem will help you to quickly generate an application using Contao
+CMS which has pre-built support for Sass, Compass, CoffeeScript, Jasmine
+and Capistrano.
+
+It also feature hashed assets served by the Contao Assets extension,
+which allows you to have an md5 appended to each of your assets URL on
+the production site.
+
+The integration with Capistrano allows you to quickly deploy, copy
+assets, import database and even upload media such as images and PDFs
+all from the command line using Capistrano.
+  EOS
   gem.homepage      = ""
   gem.required_ruby_version = Gem::Requirement.new('>= 1.9.2')
 
