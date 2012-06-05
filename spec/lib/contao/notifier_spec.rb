@@ -78,6 +78,44 @@ module TechnoGate
           subject.warn(@message, @options)
         end
       end
+
+      describe '#error' do
+        before :each do
+          @message = "Hello"
+          @output  = "Contao>> #{@message}"
+          @colored_output = "\e[0;34mContao>>\e[0m \e[0;31m#{@message}\e[0m"
+          @options = {title: "Hello, World!"}
+
+          ::Guard::UI.stub(:color_enabled?).and_return(false)
+        end
+
+        it {should respond_to :error}
+
+        it "should call guard ui" do
+          ::Guard::UI.should_receive(:info).with(@output, {})
+
+          subject.error(@message)
+        end
+
+        it "should send whatever options passed to the info method" do
+          ::Guard::UI.should_receive(:info).with(@output, @options)
+
+          subject.error(@message, @options)
+        end
+
+        it "should use colors if enabled" do
+          ::Guard::UI.should_receive(:color_enabled?).once.and_return(true)
+          ::Guard::UI.should_receive(:info).with(@colored_output, @options)
+
+          subject.error(@message, @options)
+        end
+
+        it "should be accessible at class level" do
+          subject.should_receive(:error).with(@message, @options)
+
+          subject.error(@message, @options)
+        end
+      end
     end
   end
 end

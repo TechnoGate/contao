@@ -13,6 +13,10 @@ module TechnoGate
         say(message, options.merge(color: 33))
       end
 
+      def error(message, options = {})
+        say(message, options.merge(color: 31))
+      end
+
       protected
 
       def say(message, options = {})
