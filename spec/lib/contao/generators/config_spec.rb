@@ -52,6 +52,14 @@ module TechnoGate
 
             subject.generate
           end
+
+          it "should raise ConfigAlreadyExists if the config already exists" do
+            subject.generate
+
+            expect do
+              subject.generate
+            end.to raise_error(Config::AlreadyExists)
+          end
         end
       end
     end

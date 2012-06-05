@@ -7,9 +7,11 @@ module TechnoGate
   module Contao
     module Generators
       class Config < Base
-        class ConfigAlreadyExists < RuntimeError; end
+        class AlreadyExists < RuntimeError; end
 
         def generate
+          raise AlreadyExists if File.exists?(global_config_path)
+
           FileUtils.mkdir_p File.dirname(global_config_path)
           File.open global_config_path, 'w' do |config|
             config.write YAML.dump(Contao::Application.default_global_config)
