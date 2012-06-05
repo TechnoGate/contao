@@ -71,31 +71,31 @@ module Guard
       end
     end
 
-    describe '#run_on_change' do
+    describe '#run_on_changes' do
       before :each do
         @paths = mock('paths').as_null_object
       end
 
-      it {should respond_to :run_on_change}
+      it {should respond_to :run_on_changes}
 
       it "should call #compile" do
         subject.should_receive(:compile).with(@paths).once
 
-        subject.send(:run_on_change, @paths)
+        subject.send(:run_on_changes, @paths)
       end
     end
 
-    describe '#run_on_deletion' do
+    describe '#run_on_removals' do
       before :each do
         @paths = mock('paths').as_null_object
       end
 
-      it {should respond_to :run_on_deletion}
+      it {should respond_to :run_on_removals}
 
       it "should call #compile" do
         subject.should_receive(:compile).with(@paths).once
 
-        subject.send(:run_on_deletion, @paths)
+        subject.send(:run_on_removals, @paths)
       end
     end
 

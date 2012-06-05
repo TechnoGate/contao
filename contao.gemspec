@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'oily_png'
   gem.add_dependency 'uglifier'
   gem.add_dependency 'activesupport'
-  gem.add_dependency 'guard'
+  gem.add_dependency 'guard', '>= 1.1.1'
   gem.add_dependency 'json'
   gem.add_dependency 'parseconfig'
   gem.add_dependency 'highline'
