@@ -2,7 +2,6 @@ namespace :assets do
   desc "Compile javascript"
   task :javascript do
     TechnoGate::Contao::CoffeescriptCompiler.compile
-    TechnoGate::Contao::CoffeescriptCompiler.compile
     TechnoGate::Contao::JavascriptCompiler.compile
   end
 
