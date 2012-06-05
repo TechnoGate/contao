@@ -3,11 +3,6 @@ require 'spec_helper'
 module TechnoGate
   module Contao
     describe Notifier do
-      subject { Notifier.instance }
-      let(:klass) { Notifier }
-
-      it_should_behave_like "Singleton"
-
       describe '#notify' do
         before :each do
           @message = "Hello"
@@ -40,9 +35,9 @@ module TechnoGate
         end
 
         it "should be accessible at class level" do
-          klass.any_instance.should_receive(:notify).with(@message, @options)
+          subject.should_receive(:notify).with(@message, @options)
 
-          klass.notify(@message, @options)
+          subject.notify(@message, @options)
         end
       end
 
@@ -78,9 +73,9 @@ module TechnoGate
         end
 
         it "should be accessible at class level" do
-          klass.any_instance.should_receive(:warn).with(@message, @options)
+          subject.should_receive(:warn).with(@message, @options)
 
-          klass.warn(@message, @options)
+          subject.warn(@message, @options)
         end
       end
     end

@@ -1,37 +1,30 @@
-require 'singleton'
 require 'guard'
 
 module TechnoGate
   module Contao
-    class Notifier
-      include Singleton
+    module Notifier
+      extend self
 
       def notify(message, options = {})
-        if ::Guard::UI.send(:color_enabled?)
-          message = "\e[0;34mContao>>\e[0m \e[0;32m#{message}\e[0m"
-        else
-          message = "Contao>> #{message}"
-        end
-
-        ::Guard::UI.info(message, options)
-      end
-
-      def self.notify(*args, &block)
-        instance.notify(*args, &block)
+        say(message, options.merge(color: 32))
       end
 
       def warn(message, options = {})
+        say(message, options.merge(color: 33))
+      end
+
+      protected
+
+      def say(message, options = {})
+        color = options.delete(:color)
+
         if ::Guard::UI.send(:color_enabled?)
-          message = "\e[0;34mContao>>\e[0m \e[0;33m#{message}\e[0m"
+          message = "\e[0;34mContao>>\e[0m \e[0;#{color}m#{message}\e[0m"
         else
           message = "Contao>> #{message}"
         end
 
         ::Guard::UI.info(message, options)
-      end
-
-      def self.warn(*args, &block)
-        instance.warn(*args, &block)
       end
     end
   end
