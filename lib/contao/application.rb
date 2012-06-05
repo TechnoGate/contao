@@ -38,7 +38,7 @@ module TechnoGate
       end
 
       def name
-        File.basename TechnoGate::Contao.root
+        self.config.application_name || File.basename(Contao.root)
       end
 
       def self.name

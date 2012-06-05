@@ -61,12 +61,28 @@ module TechnoGate
       describe '#name' do
         it {should respond_to :name}
 
-        it "should return the correct name" do
-          subject.name.should == 'root'
+        describe "without it being set in the configuration" do
+          before :each do
+            TechnoGate::Contao::Application.configure do
+              config.application_name = nil
+            end
+          end
+
+          it "should return the correct name" do
+            subject.name.should == 'root'
+          end
+
+          it "should be accessible at class level" do
+            Application.name.should == 'root'
+          end
+        end
+
+        it "should be my_awesome_project" do
+          subject.name.should == 'my_awesome_project'
         end
 
         it "should be accessible at class level" do
-          Application.name.should == 'root'
+          Application.name.should == 'my_awesome_project'
         end
       end
     end
