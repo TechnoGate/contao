@@ -1,4 +1,5 @@
 require 'contao/version'
+require 'core_ext/object'
 require 'singleton'
 require 'ostruct'
 

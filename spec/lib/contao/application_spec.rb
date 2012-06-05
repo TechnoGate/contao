@@ -2,17 +2,29 @@ require 'spec_helper'
 
 module TechnoGate
   module Contao
-    describe Application do
+    describe Application, :fakefs do
       subject { Contao::Application.instance }
       let(:klass) { Contao::Application }
 
+      before :each do
+        stub_filesystem!(:global_config => {'install_password' => 'some install password'})
+        subject.send :parse_global_config
+      end
+
       it_should_behave_like 'Config'
 
-      describe '#linkify', :fakefs do
-        before :each do
-          stub_filesystem!
+      describe "Global Config" do
+
+        it "should parse the global config file if the file exists" do
+          subject.config.global.should_not be_empty
         end
 
+        it "should correctly parse the global config" do
+          subject.config.global.install_password.should == 'some install password'
+        end
+      end
+
+      describe '#linkify' do
         it "should call #exhaustive_list_of_files_to_link" do
           subject.should_receive(:exhaustive_list_of_files_to_link).with(
             Contao.expandify(Application.config.contao_path),
@@ -36,11 +48,7 @@ module TechnoGate
         end
       end
 
-      describe '#exhaustive_list_of_files_to_link', :fakefs do
-        before :each do
-          stub_filesystem!
-        end
-
+      describe '#exhaustive_list_of_files_to_link' do
         it "should return the correct list of files" do
           list = subject.send :exhaustive_list_of_files_to_link, '/root/contao', '/root/public'
           list.should == [
