@@ -7,6 +7,11 @@ module Guard
     end
 
     describe '#init' do
+      it "should create @coffeescript_compiler" do
+        subject.instance_variable_get(:@coffeescript_compiler).
+          should be_instance_of TechnoGate::Contao::CoffeescriptCompiler
+      end
+
       it "should create @javascript_compiler" do
         subject.instance_variable_get(:@javascript_compiler).
           should be_instance_of TechnoGate::Contao::JavascriptCompiler
@@ -34,13 +39,16 @@ module Guard
 
     describe '#run_all' do
       before :each do
-        @stylesheet_compiler = mock('stylesheet_compiler', :clean => true)
-        @javascript_compiler  = mock('javascript_compiler', :clean => true)
+        @stylesheet_compiler = mock('stylesheet_compiler', clean: true)
+        @coffeescript_compiler  = mock('coffeescript_compiler', clean: true)
+        @javascript_compiler  = mock('javascript_compiler', clean: true)
 
         subject.instance_variable_set(:@stylesheet_compiler, @stylesheet_compiler)
+        subject.instance_variable_set(:@coffeescript_compiler, @coffeescript_compiler)
         subject.instance_variable_set(:@javascript_compiler, @javascript_compiler)
 
         subject.stub(:compile_stylesheet)
+        subject.stub(:compile_coffeescript)
         subject.stub(:compile_javascript)
       end
 
@@ -48,6 +56,7 @@ module Guard
 
       it "Should clean assets" do
         @stylesheet_compiler.should_receive(:clean).once.ordered
+        @coffeescript_compiler.should_receive(:clean).once.ordered
         @javascript_compiler.should_receive(:clean).once.ordered
 
         subject.run_all
@@ -55,6 +64,7 @@ module Guard
 
       it "Should recompile assets" do
         subject.should_receive(:compile_stylesheet).once.ordered
+        subject.should_receive(:compile_coffeescript).once.ordered
         subject.should_receive(:compile_javascript).once.ordered
 
         subject.run_all
@@ -91,7 +101,7 @@ module Guard
 
     describe '#compile_stylesheet' do
       before :each do
-        @stylesheet_compiler = mock('stylesheet_compiler', :clean => true)
+        @stylesheet_compiler = mock('stylesheet_compiler', clean: true)
 
         subject.instance_variable_set(:@stylesheet_compiler, @stylesheet_compiler)
       end
@@ -105,9 +115,27 @@ module Guard
       end
     end
 
+    describe '#compile_coffeescript' do
+      before :each do
+        @coffeescript_compiler  = mock('coffeescript_compiler', clean: true, compile: true)
+
+        subject.instance_variable_set(:@coffeescript_compiler, @coffeescript_compiler)
+
+        subject.stub :compile_javascript
+      end
+
+      it {should respond_to :compile_coffeescript}
+
+      it "should call @coffeescript_compiler.compile" do
+        @coffeescript_compiler.should_receive(:compile).once
+
+        subject.send :compile_coffeescript
+      end
+    end
+
     describe '#compile_javascript' do
       before :each do
-        @javascript_compiler  = mock('javascript_compiler', :clean => true)
+        @javascript_compiler  = mock('javascript_compiler', clean: true)
 
         subject.instance_variable_set(:@javascript_compiler, @javascript_compiler)
       end
@@ -124,6 +152,7 @@ module Guard
     describe '#compile' do
       before :each do
         subject.stub :compile_stylesheet
+        subject.stub :compile_coffeescript
         subject.stub :compile_javascript
       end
 
@@ -131,6 +160,12 @@ module Guard
         subject.should_receive(:compile_stylesheet).once
 
         subject.send :compile, ["app/assets/stylesheets/file.css"]
+      end
+
+      it "should call compile_coffeescript only if some coffeescript paths has changed" do
+        subject.should_receive(:compile_coffeescript).once
+
+        subject.send :compile, ["app/assets/javascripts/file.js.coffee"]
       end
 
       it "should call compile_javascript only if some javascript paths has changed" do
@@ -145,10 +180,22 @@ module Guard
         subject.send :compile, ["app/assets/stylesheets/file.css", "app/assets/stylesheets/file2.css"]
       end
 
+      it "should compile coffeescripts only once" do
+        subject.should_receive(:compile_coffeescript).once
+
+        subject.send :compile, ["app/assets/javascripts/file.js.coffee", "app/assets/javascripts/file2.js.coffee"]
+      end
+
       it "should compile javascripts only once" do
         subject.should_receive(:compile_javascript).once
 
-        subject.send :compile, ["app/assets/javascripts/file.css", "app/assets/javascripts/file2.css"]
+        subject.send :compile, ["app/assets/javascripts/file.js", "app/assets/javascripts/file2.js"]
+      end
+
+      it "should compile javascript if coffeescript was used" do
+        subject.should_receive(:compile_javascript).once
+
+        subject.send :compile, ["app/assets/javascripts/file.js.coffee"]
       end
     end
 
@@ -174,12 +221,23 @@ module Guard
       end
     end
 
+    describe "#is_coffeescript?" do
+      it "should return true for coffeescript file" do
+        subject.send(:is_coffeescript?, "app/assets/javascripts/file.js.coffee").should be_true
+      end
+
+      it "should return false for non-coffeescript files" do
+        subject.send(:is_coffeescript?, "app/assets/stylesheets/file.css").should_not be_true
+        subject.send(:is_coffeescript?, "app/assets/stylesheets/file.js").should_not be_true
+      end
+    end
+
     describe "#is_javascript?" do
-      it "should return true for stylesheet file" do
+      it "should return true for javascript file" do
         subject.send(:is_javascript?, "app/assets/javascripts/file.js").should be_true
       end
 
-      it "should return false for non-stylesheet files" do
+      it "should return false for non-coffeescript files" do
         subject.send(:is_javascript?, "app/assets/stylesheets/file.css").should_not be_true
       end
     end
