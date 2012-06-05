@@ -2,18 +2,20 @@
 require File.expand_path('../lib/contao/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Wael Nasreddine"]
-  gem.email         = ["wael.nasreddine@gmail.com"]
+  gem.authors       = ['Wael Nasreddine']
+  gem.email         = ['wael.nasreddine@gmail.com']
   gem.description   = %q{Contao Integration with Compass, Sass, Coffee-script, Rake, Guard with asset pre-compiler and asset-manifest generator}
   gem.summary       = gem.description
   gem.homepage      = ""
+  gem.required_ruby_version = Gem::Requirement.new('>= 1.9.2')
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "contao"
-  gem.require_paths = ["lib"]
+  gem.name          = 'contao'
+  gem.require_paths = ['lib']
   gem.version       = Contao::VERSION
+
 
   # Runtime dependencies
   gem.add_dependency 'rake'
