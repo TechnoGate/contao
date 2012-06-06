@@ -73,6 +73,88 @@ shared_examples_for "Compiler" do
     end
   end
 
+  describe '#input_from_config_path' do
+    it {should respond_to :input_from_config_path}
+  end
+
+  describe '#output_from_config_path' do
+    it {should respond_to :output_from_config_path}
+  end
+
+  describe '#input_from_options' do
+    it {should respond_to :input_from_options}
+  end
+
+  describe '#output_from_options' do
+    it {should respond_to :output_from_options}
+  end
+
+  describe '#input_path' do
+    it {should respond_to :input_path}
+
+    it "should return whatever in input_from_config_path" do
+      mock('input').tap do |path|
+        subject.stub(:input_from_config_path).and_return path
+
+        subject.send(:input_path).should == path
+      end
+    end
+
+    it "should return whatever in input_from_options" do
+      mock('input').tap do |path|
+        subject.stub(:input_from_options).and_return path
+
+        subject.send(:input_path).should == path
+      end
+    end
+
+    it "should prefer options over config" do
+      {options: mock('options'), config: mock('config')}.tap do |mocks|
+        subject.stub(:input_from_config_path).and_return mocks[:config]
+        subject.stub(:input_from_options).and_return mocks[:options]
+
+        subject.send(:input_path).should == mocks[:options]
+      end
+    end
+  end
+
+  describe '#output_path' do
+    it {should respond_to :output_path}
+
+    it "should return whatever in output_from_config_path" do
+      mock('output').tap do |path|
+        subject.stub(:output_from_config_path).and_return path
+
+        subject.send(:output_path).should == path
+      end
+    end
+
+    it "should return whatever in output_from_options" do
+      mock('output').tap do |path|
+        subject.stub(:output_from_options).and_return path
+
+        subject.send(:output_path).should == path
+      end
+    end
+
+    it "should prefer options over config" do
+      {options: mock('options'), config: mock('config')}.tap do |mocks|
+        subject.stub(:output_from_config_path).and_return mocks[:config]
+        subject.stub(:output_from_options).and_return mocks[:options]
+
+        subject.send(:output_path).should == mocks[:options]
+      end
+    end
+  end
+
+  describe "#compiler_name" do
+    it {should respond_to :compiler_name}
+
+    it "should not be empty" do
+      subject.send(:compiler_name).should_not be_empty
+    end
+  end
+
   describe "#prepare_folders", :fakefs do
     it {should respond_to :prepare_folders}
 

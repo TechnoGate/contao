@@ -12,6 +12,18 @@ module TechnoGate
 
       protected
 
+      def compiler_name
+        :javascript
+      end
+
+      def input_from_config_path
+        Application.config.javascripts_path
+      end
+
+      def output_from_config_path
+        Contao.expandify(Application.config.assets_public_path)
+      end
+
       # Compile assets
       #
       # This method compiles javascripts from
@@ -39,8 +51,11 @@ module TechnoGate
         FileUtils.mv tmp_app_js, application_js_path
       end
 
+      # Generate source folders give the exact source and the folder
+      # under tmp/compiled_javascript on which CoffeeScript compiler
+      # adds javascript files to.
       def javascripts_path
-        Application.config.javascripts_path.map do |path|
+        input_path.map do |path|
           ["tmp/compiled_javascript/#{path.gsub('/', '_')}", path]
         end.flatten
       end
@@ -51,7 +66,7 @@ module TechnoGate
       end
 
       def application_js_path
-        Contao.expandify(Application.config.assets_public_path).join("application.js")
+        Pathname(output_from_config_path).join("application.js")
       end
 
       def generate_manifest

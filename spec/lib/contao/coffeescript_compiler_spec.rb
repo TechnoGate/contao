@@ -23,12 +23,7 @@ module TechnoGate
             '/root/my_awesome_project/vendor/assets/javascripts/simple_coffeescript_file.js.coffee',
           ].each do |file|
             FileUtils.mkdir_p File.dirname(file)
-            File.open(file, 'w') do |f|
-              f.write file.
-                gsub('/root/my_awesome_project/app/assets/javascripts/', '').
-                gsub('/root/my_awesome_project/lib/assets/javascripts/', '').
-                gsub('/root/my_awesome_project/vendor/assets/javascripts/', '')
-            end
+            File.open(file, 'w') { |f| f.write "Asset File" }
           end
         end
 
@@ -40,6 +35,18 @@ module TechnoGate
           File.exists?('/root/my_awesome_project/tmp/compiled_javascript/vendor_assets_javascripts/simple_coffeescript_file.js').should be_true
           File.exists?('/root/my_awesome_project/tmp/compiled_javascript/app_assets_javascripts/simple_javascript_file').should be_false
           File.exists?('/root/my_awesome_project/tmp/compiled_javascript/app_assets_javascripts/nested/script.js').should be_true
+        end
+
+        it "should compile given a different output path" do
+          subject.should_receive(:output_from_options).at_least(:once).and_return('/root/wat')
+
+          subject.send :compile_assets
+
+          File.exists?('/root/wat/app_assets_javascripts/simple_coffeescript_file.js').should be_true
+          File.exists?('/root/wat/lib_assets_javascripts/simple_coffeescript_file.js').should be_true
+          File.exists?('/root/wat/vendor_assets_javascripts/simple_coffeescript_file.js').should be_true
+          File.exists?('/root/wat/app_assets_javascripts/simple_javascript_file').should be_false
+          File.exists?('/root/wat/app_assets_javascripts/nested/script.js').should be_true
         end
       end
 

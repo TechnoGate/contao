@@ -39,6 +39,30 @@ module TechnoGate
         Contao.expandify(Contao::Application.config.assets_public_path)
       end
 
+      def input_from_config_path
+        raise "Child class must define this"
+      end
+
+      def input_from_options
+        @options[:input][compiler_name] rescue nil
+      end
+
+      def input_path
+        input_from_options || input_from_config_path
+      end
+
+      def output_from_config_path
+        raise "Child class must define this"
+      end
+
+      def output_from_options
+        @options[:output][compiler_name] rescue nil
+      end
+
+      def output_path
+        output_from_options || output_from_config_path
+      end
+
       # Prepare folders
       def prepare_folders
         FileUtils.mkdir_p assets_public_path

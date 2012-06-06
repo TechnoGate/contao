@@ -22,6 +22,17 @@ module TechnoGate
       end
 
       protected
+      def compiler_name
+        :stylesheet
+      end
+
+      # This class can't be told where to get assets from or where to compile to
+      # unless I figure out how to configure the UpdateProject without a file
+      def input_from_config_path
+      end
+      def output_from_config_path
+      end
+
       def compile_assets
         @updater ||= Compass::Commands::UpdateProject.new(
           Contao.root,
