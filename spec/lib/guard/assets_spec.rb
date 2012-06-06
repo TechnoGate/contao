@@ -6,12 +6,13 @@ module Guard
       @stylesheet_compiler = mock('stylesheet_compiler', clean: true, compile: true)
       @coffeescript_compiler  = mock('coffeescript_compiler', clean: true, compile: true)
       @javascript_compiler  = mock('javascript_compiler', clean: true, compile: true)
-
-      subject.instance_variable_set(:@stylesheet_compiler, @stylesheet_compiler)
-      subject.instance_variable_set(:@coffeescript_compiler, @coffeescript_compiler)
-      subject.instance_variable_set(:@javascript_compiler, @javascript_compiler)
-      subject.instance_variable_set :@compilers,
+      @compilers =
         [@stylesheet_compiler, @coffeescript_compiler, @javascript_compiler]
+
+      subject.instance_variable_set :@stylesheet_compiler, @stylesheet_compiler
+      subject.instance_variable_set :@coffeescript_compiler, @coffeescript_compiler
+      subject.instance_variable_set :@javascript_compiler, @javascript_compiler
+      subject.instance_variable_set :@compilers, @compilers
     end
 
     it "should inherit from Guard" do
@@ -38,13 +39,22 @@ module Guard
           should be_instance_of TechnoGate::Contao::StylesheetCompiler
       end
 
-      it "should create @compilers with a specific order" do
+      it "should create @compilers with a specific order with compilers specified" do
         @assets = Assets.new([], compilers: [:javascript, :coffeescript, :stylesheet])
         @assets.instance_variable_get(:@compilers).size.should == 3
         @assets.instance_variable_get(:@compilers).should == [
           @assets.instance_variable_get(:@stylesheet_compiler),
           @assets.instance_variable_get(:@coffeescript_compiler),
           @assets.instance_variable_get(:@javascript_compiler),
+        ]
+      end
+
+      it "should create @compilers with a specific order" do
+        subject.instance_variable_get(:@compilers).size.should == 3
+        subject.instance_variable_get(:@compilers).should == [
+          subject.instance_variable_get(:@stylesheet_compiler),
+          subject.instance_variable_get(:@coffeescript_compiler),
+          subject.instance_variable_get(:@javascript_compiler),
         ]
       end
     end
@@ -113,45 +123,54 @@ module Guard
 
     describe '#compile' do
       it "should call compile_stylesheet only if some stylesheet paths has changed" do
-        subject.should_receive(:compile_stylesheet).once
+        @stylesheet_compiler.should_receive(:compile).once
 
         subject.send :compile, ["app/assets/stylesheets/file.css"]
       end
 
       it "should call compile_coffeescript only if some coffeescript paths has changed" do
-        subject.should_receive(:compile_coffeescript).once
+        @coffeescript_compiler.should_receive(:compile).once
 
         subject.send :compile, ["app/assets/javascripts/file.js.coffee"]
       end
 
       it "should call compile_javascript only if some javascript paths has changed" do
-        subject.should_receive(:compile_javascript).once
+        @javascript_compiler.should_receive(:compile).once
 
         subject.send :compile, ["app/assets/javascripts/file.js"]
       end
 
       it "should compile stylesheets only once" do
-        subject.should_receive(:compile_stylesheet).once
+        @stylesheet_compiler.should_receive(:compile).once
 
         subject.send :compile, ["app/assets/stylesheets/file.css", "app/assets/stylesheets/file2.css"]
       end
 
       it "should compile coffeescripts only once" do
-        subject.should_receive(:compile_coffeescript).once
+        @coffeescript_compiler.should_receive(:compile).once
 
         subject.send :compile, ["app/assets/javascripts/file.js.coffee", "app/assets/javascripts/file2.js.coffee"]
       end
 
       it "should compile javascripts only once" do
-        subject.should_receive(:compile_javascript).once
+        @javascript_compiler.should_receive(:compile).once
 
         subject.send :compile, ["app/assets/javascripts/file.js", "app/assets/javascripts/file2.js"]
       end
 
       it "should compile javascript if coffeescript was used" do
-        subject.should_receive(:compile_javascript).once
+        @coffeescript_compiler.should_receive(:compile).once
+        @javascript_compiler.should_receive(:compile).once
 
         subject.send :compile, ["app/assets/javascripts/file.js.coffee"]
+      end
+
+      it "should not try to compile javascript if compiler not available even if path is a js" do
+        @compilers = [@stylesheet_compiler, @coffeescript_compiler]
+        subject.instance_variable_set :@compilers, @compilers
+        @javascript_compiler.should_not_receive(:compile)
+
+        subject.send :compile, ["app/assets/javascripts/file.js"]
       end
     end
 

@@ -28,9 +28,8 @@ module Guard
       @compilers.each do |compiler|
         compiler.clean
       end
-      compile_stylesheet
-      compile_coffeescript
-      compile_javascript
+
+      call_compilers
     end
 
     # Called on file(s) modifications that the Guard watches.
@@ -66,6 +65,8 @@ module Guard
       compilers << :stylesheet  if unsorted_compilers.include? :stylesheet
       compilers << :coffeescript if unsorted_compilers.include? :coffeescript
       compilers << :javascript  if unsorted_compilers.include? :javascript
+
+      compilers
     end
 
     def compile(paths)
@@ -77,21 +78,18 @@ module Guard
         stylesheet = true if !stylesheet && is_stylesheet?(path)
       end
 
-      compile_stylesheet if stylesheet
-      compile_coffeescript if coffeescript
-      compile_javascript if coffeescript || javascript
+      compilers = @compilers.clone
+      compilers.delete(:stylesheet) unless stylesheet
+      compilers.delete(:javascript) unless javascript
+      compilers.delete(:coffeescript) unless coffeescript
+
+      call_compilers compilers
     end
 
-    def compile_stylesheet
-      @stylesheet_compiler.compile
-    end
-
-    def compile_coffeescript
-      @coffeescript_compiler.compile
-    end
-
-    def compile_javascript
-      @javascript_compiler.compile
+    def call_compilers(compilers = @compilers)
+      compilers.each do |compiler|
+        compiler.compile
+      end
     end
 
     def is_coffeescript?(path)
