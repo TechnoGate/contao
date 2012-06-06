@@ -2,24 +2,50 @@ require 'spec_helper'
 
 module Guard
   describe Assets do
+    before :each do
+      @stylesheet_compiler = mock('stylesheet_compiler', clean: true, compile: true)
+      @coffeescript_compiler  = mock('coffeescript_compiler', clean: true, compile: true)
+      @javascript_compiler  = mock('javascript_compiler', clean: true, compile: true)
+
+      subject.instance_variable_set(:@stylesheet_compiler, @stylesheet_compiler)
+      subject.instance_variable_set(:@coffeescript_compiler, @coffeescript_compiler)
+      subject.instance_variable_set(:@javascript_compiler, @javascript_compiler)
+      subject.instance_variable_set :@compilers,
+        [@stylesheet_compiler, @coffeescript_compiler, @javascript_compiler]
+    end
+
     it "should inherit from Guard" do
       subject.class.superclass.should == ::Guard::Guard
     end
 
     describe '#init' do
+      before :each do
+        @assets = Assets.new
+      end
+
       it "should create @coffeescript_compiler" do
-        subject.instance_variable_get(:@coffeescript_compiler).
+        @assets.instance_variable_get(:@coffeescript_compiler).
           should be_instance_of TechnoGate::Contao::CoffeescriptCompiler
       end
 
       it "should create @javascript_compiler" do
-        subject.instance_variable_get(:@javascript_compiler).
+        @assets.instance_variable_get(:@javascript_compiler).
           should be_instance_of TechnoGate::Contao::JavascriptCompiler
       end
 
       it "should create @stylesheet_compiler" do
-        subject.instance_variable_get(:@stylesheet_compiler).
+        @assets.instance_variable_get(:@stylesheet_compiler).
           should be_instance_of TechnoGate::Contao::StylesheetCompiler
+      end
+
+      it "should create @compilers with a specific order" do
+        @assets = Assets.new([], compilers: [:javascript, :coffeescript, :stylesheet])
+        @assets.instance_variable_get(:@compilers).size.should == 3
+        @assets.instance_variable_get(:@compilers).should == [
+          @assets.instance_variable_get(:@stylesheet_compiler),
+          @assets.instance_variable_get(:@coffeescript_compiler),
+          @assets.instance_variable_get(:@javascript_compiler),
+        ]
       end
     end
 
@@ -38,20 +64,6 @@ module Guard
     end
 
     describe '#run_all' do
-      before :each do
-        @stylesheet_compiler = mock('stylesheet_compiler', clean: true)
-        @coffeescript_compiler  = mock('coffeescript_compiler', clean: true)
-        @javascript_compiler  = mock('javascript_compiler', clean: true)
-
-        subject.instance_variable_set(:@stylesheet_compiler, @stylesheet_compiler)
-        subject.instance_variable_set(:@coffeescript_compiler, @coffeescript_compiler)
-        subject.instance_variable_set(:@javascript_compiler, @javascript_compiler)
-
-        subject.stub(:compile_stylesheet)
-        subject.stub(:compile_coffeescript)
-        subject.stub(:compile_javascript)
-      end
-
       it {should respond_to :run_all}
 
       it "Should clean assets" do
@@ -63,9 +75,9 @@ module Guard
       end
 
       it "Should recompile assets" do
-        subject.should_receive(:compile_stylesheet).once.ordered
-        subject.should_receive(:compile_coffeescript).once.ordered
-        subject.should_receive(:compile_javascript).once.ordered
+        @stylesheet_compiler.should_receive(:compile).once.ordered
+        @coffeescript_compiler.should_receive(:compile).once.ordered
+        @javascript_compiler.should_receive(:compile).once.ordered
 
         subject.run_all
       end
@@ -99,63 +111,7 @@ module Guard
       end
     end
 
-    describe '#compile_stylesheet' do
-      before :each do
-        @stylesheet_compiler = mock('stylesheet_compiler', clean: true)
-
-        subject.instance_variable_set(:@stylesheet_compiler, @stylesheet_compiler)
-      end
-
-      it {should respond_to :compile_stylesheet}
-
-      it "should call @stylesheet_compiler.compile" do
-        @stylesheet_compiler.should_receive(:compile).once
-
-        subject.send :compile_stylesheet
-      end
-    end
-
-    describe '#compile_coffeescript' do
-      before :each do
-        @coffeescript_compiler  = mock('coffeescript_compiler', clean: true, compile: true)
-
-        subject.instance_variable_set(:@coffeescript_compiler, @coffeescript_compiler)
-
-        subject.stub :compile_javascript
-      end
-
-      it {should respond_to :compile_coffeescript}
-
-      it "should call @coffeescript_compiler.compile" do
-        @coffeescript_compiler.should_receive(:compile).once
-
-        subject.send :compile_coffeescript
-      end
-    end
-
-    describe '#compile_javascript' do
-      before :each do
-        @javascript_compiler  = mock('javascript_compiler', clean: true)
-
-        subject.instance_variable_set(:@javascript_compiler, @javascript_compiler)
-      end
-
-      it {should respond_to :compile_javascript}
-
-      it "should call @javascript_compiler.compile" do
-        @javascript_compiler.should_receive(:compile).once
-
-        subject.send :compile_javascript
-      end
-    end
-
     describe '#compile' do
-      before :each do
-        subject.stub :compile_stylesheet
-        subject.stub :compile_coffeescript
-        subject.stub :compile_javascript
-      end
-
       it "should call compile_stylesheet only if some stylesheet paths has changed" do
         subject.should_receive(:compile_stylesheet).once
 
