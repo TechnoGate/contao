@@ -4,7 +4,7 @@ require File.expand_path('../lib/contao/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ['Wael Nasreddine']
   gem.email         = ['wael.nasreddine@gmail.com']
-  gem.description   = %q{Contao Integration with Compass, Sass, Coffee-script, Rake, Guard with asset pre-compiler and asset-manifest generator}
+  gem.description   = %q{Contao Integration with Rails.}
   gem.summary       = <<-EOS
 This gem will help you to quickly generate an application using Contao
 CMS which has pre-built support for Sass, Compass, CoffeeScript, Jasmine
@@ -18,7 +18,7 @@ The integration with Capistrano allows you to quickly deploy, copy
 assets, import database and even upload media such as images and PDFs
 all from the command line using Capistrano.
   EOS
-  gem.homepage      = ""
+  gem.homepage      = 'http://technogate.github.com/contao'
   gem.required_ruby_version = Gem::Requirement.new('>= 1.9.2')
 
   gem.files         = `git ls-files`.split($\)
@@ -31,15 +31,9 @@ all from the command line using Capistrano.
 
   # Runtime dependencies
   gem.add_dependency 'rake'
-  gem.add_dependency 'compass'
-  gem.add_dependency 'oily_png'
-  gem.add_dependency 'uglifier'
   gem.add_dependency 'activesupport'
-  gem.add_dependency 'guard', '>= 1.1.1'
-  gem.add_dependency 'json'
   gem.add_dependency 'parseconfig'
   gem.add_dependency 'highline'
-  gem.add_dependency 'coffee-script'
 
   # Development dependencies
   gem.add_development_dependency 'rspec'

@@ -42,17 +42,46 @@ def stub_config_application!(application_name = 'my_awesome_project')
     f.write(<<-EOS)
 require File.expand_path('../boot', __FILE__)
 
-# Initialize the application
-Dir["#{TechnoGate::Contao.root.join('config', 'initializers')}/**/*.rb"].each {|f| require f}
+# Pick the frameworks you want:
+require "sprockets/railtie"
 
-TechnoGate::Contao::Application.configure do
-  config.application_name   = '#{application_name}'
-  config.javascripts_path   = ["vendor/assets/javascripts", "lib/assets/javascripts", "app/assets/javascripts"]
-  config.stylesheets_path   = 'app/assets/stylesheets'
-  config.images_path        = 'app/assets/images'
-  config.contao_path        = 'contao'
-  config.contao_public_path = 'public'
-  config.assets_public_path = 'public/resources'
+if defined?(Bundler)
+  # If you precompile assets before deploying to production, use this line
+  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  # If you want your assets lazily compiled in production, use this line
+  # Bundler.require(:default, :assets, Rails.env)
+end
+
+module ContaoTemplate
+  class Application < Rails::Application
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration should go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded.
+
+    # The application name
+    config.application_name = '#{application_name}'
+
+    # Custom directories with classes and modules you want to be autoloadable.
+    # config.autoload_paths += %W(\#{config.root}/extras)
+
+    # Configure the default encoding used in templates for Ruby 1.9.
+    config.encoding = "utf-8"
+
+    # Enable escaping HTML in JSON.
+    config.active_support.escape_html_entities_in_json = true
+
+    # Enable the asset pipeline
+    config.assets.enabled = true
+
+    # Change the prefix of the assets
+    config.assets.prefix = 'resources'
+
+    # Version of your assets, change this if you want to expire all your assets
+    config.assets.version = '1.0'
+
+    # Contao configurations
+    config.contao_path = 'contao'
+  end
 end
     EOS
   end
