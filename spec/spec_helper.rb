@@ -21,22 +21,14 @@ RSpec.configure do |c|
   c.include FakeFS::SpecHelpers, :fakefs
 
   c.before :each do
-    ::TechnoGate::Contao.env  = @env  = :development
-    ::TechnoGate::Contao.root = @root = "/root/my_awesome_project"
-    ::TechnoGate::Contao::Application.configure do
-      config.application_name   = 'my_awesome_project'
-      config.javascripts_path   = ['vendor/assets/javascripts', 'lib/assets/javascripts', 'app/assets/javascripts']
-      config.stylesheets_path   = 'app/assets/stylesheets'
-      config.images_path        = 'app/assets/images'
-      config.contao_path        = 'contao'
-      config.contao_public_path = 'public'
-      config.assets_public_path = 'public/resources'
+    Rails.env = 'development'
+    Rails.root = @root = '/root/my_awesome_project'
+
+    Rails.config.tap do |config|
+      config.contao_path = 'contao'
     end
 
     silence_warnings do
-      ::Compass::Commands::UpdateProject = stub("Compass Update Project").as_null_object
-      ::Compass::Commands::CleanProject = stub("Compass Clea Project").as_null_object
-      ::Uglifier = stub("Uglifier").as_null_object
       ::Guard::UI = stub('Guard UI').as_null_object
     end
   end

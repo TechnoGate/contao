@@ -11,24 +11,22 @@ module TechnoGate
         subject.send :parse_global_config
       end
 
-      it_should_behave_like 'Config'
-
       describe "Global Config" do
 
         it "should parse the global config file if the file exists" do
-          subject.config.global.should_not be_empty
+          subject.config.contao_global_config.should_not be_empty
         end
 
         it "should correctly parse the global config" do
-          subject.config.global.install_password.should == 'some install password'
+          subject.config.contao_global_config.install_password.should == 'some install password'
         end
       end
 
       describe '#linkify' do
         it "should call #exhaustive_list_of_files_to_link" do
           subject.should_receive(:exhaustive_list_of_files_to_link).with(
-            Contao.expandify(Application.config.contao_path),
-            Contao.expandify(Application.config.contao_public_path)
+            Rails.root.join(Rails.application.config.contao_path),
+            Rails.public_path
           ).once.and_return []
 
           subject.linkify
@@ -63,7 +61,7 @@ module TechnoGate
 
         describe "without it being set in the configuration" do
           before :each do
-            TechnoGate::Contao::Application.configure do
+            Rails.config.tap do |config|
               config.application_name = nil
             end
           end
@@ -79,7 +77,7 @@ module TechnoGate
 
         describe "with it being set in the configuration" do
           before :each do
-            TechnoGate::Contao::Application.configure do
+            Rails.config.tap do |config|
               config.application_name = 'my_super_awesome_project'
             end
           end

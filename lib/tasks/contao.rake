@@ -17,20 +17,22 @@ def ask(what, options = {})
   end
 end
 
+def public_path
+  Pathname.new Rails.public_path
+end
+
 namespace :contao do
   desc "Link all contao files"
   task :bootstrap do
-    public = TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path)
-
     TechnoGate::Contao::Application.linkify
 
-    FileUtils.mkdir_p public.join('system/logs')
-    File.open(public.join('sitemap.xml'), 'w') {|f| f.write ''}
+    FileUtils.mkdir_p public_path.join('system/logs')
+    File.open(public_path.join('sitemap.xml'), 'w') {|f| f.write ''}
 
     Rake::Task['contao:generate_localconfig'].invoke
     Rake::Task['contao:generate_htaccess'].invoke
     Rake::Task['contao:apply_patches'].invoke
-    Rake::Task['assets:precompile'].invoke
+    Rake::Task['assets:precompile'].invoke if Rails.env.production?
     Rake::Task['contao:fix_permissions'].invoke
 
     TechnoGate::Contao::Notifier.notify("The contao folder has been bootstraped, Good Luck.", title: "Contao Bootstrap")
@@ -38,11 +40,11 @@ namespace :contao do
 
   desc 'Apply Patches'
   task :apply_patches do
-    path = File.expand_path "../../../contao_patches/#{TechnoGate::Contao.env}", __FILE__
+    path = File.expand_path "../../../contao_patches/#{Rails.env}", __FILE__
     Dir["#{path}/**/*.patch"].each do |patch|
       TechnoGate::Contao::Notifier.notify("Applying patch #{File.basename patch}", title: "Contao Bootstrap")
       result = system <<-CMD
-        cd #{TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path)}
+        cd #{public_path}
         patch -Nfp1 -i #{patch} --no-backup-if-mismatch
       CMD
 
@@ -57,7 +59,6 @@ namespace :contao do
   task :fix_permissions do
     require 'fileutils'
 
-    public = TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path)
     paths = [
       'system/html',
       'system/logs',
@@ -65,13 +66,13 @@ namespace :contao do
       'system/tmp',
       'system/cache',
       'system/config',
-    ].map {|p| public.join p}.reject {|p| !File.exists? p}
+    ].map {|p| public_path.join p}.reject {|p| !File.exists? p}
 
     FileUtils.chmod 0777, paths
 
-    FileUtils.chmod 0666, Dir["#{public}/system/config/**/*.php"]
+    FileUtils.chmod 0666, Dir["#{public_path}/system/config/**/*.php"]
 
-    Dir["#{public}/system/modules/efg/**/*"].each do |f|
+    Dir["#{public_path}/system/modules/efg/**/*"].each do |f|
       if File.directory?(f)
         FileUtils.chmod 0777, f
       else
@@ -79,7 +80,7 @@ namespace :contao do
       end
     end
 
-    FileUtils.chmod 0666, public.join('sitemap.xml')
+    FileUtils.chmod 0666, public_path.join('sitemap.xml')
 
     TechnoGate::Contao::Notifier.notify("The contao folder's permissions has been fixed.", title: "Contao Bootstrap")
   end
@@ -87,7 +88,7 @@ namespace :contao do
   desc "Generate the localconfig.php"
   task :generate_localconfig do
     require 'active_support/core_ext/object/blank'
-    config = TechnoGate::Contao::Application.config.global
+    config = TechnoGate::Contao::Application.config.contao_global_config
 
     if !config && config.install_password.blank? || config.encryption_key.blank?
       message = <<-EOS
@@ -99,12 +100,11 @@ namespace :contao do
       TechnoGate::Contao::Notifier.warn(message, title: "Contao Bootstrap")
     else
       config = config.clone
-      config.contao_env = TechnoGate::Contao.env
       config.application_name = TechnoGate::Contao::Application.name
-      config.mysql.database = config.application_name
+      config.mysql.database = TechnoGate::Contao::Application.name
 
-      localconfig_template = TechnoGate::Contao.expandify('config/examples/localconfig.php.erb')
-      localconfig_path = TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path).join('system/config/localconfig.php')
+      localconfig_template = Rails.root.join 'config/examples/localconfig.php.erb'
+      localconfig_path = public_path.join 'system/config/localconfig.php'
 
       localconfig = ERB.new(File.read(localconfig_template)).result(binding)
       File.open(localconfig_path, 'w') {|f| f.write localconfig }
@@ -115,8 +115,7 @@ namespace :contao do
 
   desc "Generate the htaccess file"
   task :generate_htaccess do
-    public = TechnoGate::Contao.expandify(TechnoGate::Contao::Application.config.contao_public_path)
-    FileUtils.cp public.join('.htaccess.default'), public.join('.htaccess')
+    FileUtils.cp public_path.join('.htaccess.default'), public_path.join('.htaccess')
 
     TechnoGate::Contao::Notifier.notify("The .htaccess was successfully generated.", title: "Contao Bootstrap")
   end
