@@ -90,7 +90,7 @@ namespace :contao do
     require 'active_support/core_ext/object/blank'
     config = TechnoGate::Contao::Application.config.contao_global_config
 
-    if !config && config.install_password.blank? || config.encryption_key.blank?
+    if !config || config.install_password.blank? || config.encryption_key.blank?
       message = <<-EOS
         You did not set the install password, and the encryption key in your
         #{ENV['HOME']}/.contao/config.yml, I cannot generate a localconfig
@@ -101,7 +101,13 @@ namespace :contao do
     else
       config = config.clone
       config.application_name = TechnoGate::Contao::Application.name
-      config.mysql.database = TechnoGate::Contao::Application.name
+
+      config.db_server_app = 'mysql'
+      config.db_hostname   = config.mysql.host
+      config.db_port       = config.mysql.port
+      config.db_username   = config.mysql.user
+      config.db_password   = config.mysql.pass
+      config.db_name       = TechnoGate::Contao::Application.name
 
       localconfig_template = Rails.root.join 'config/examples/localconfig.php.erb'
       localconfig_path = public_path.join 'system/config/localconfig.php'

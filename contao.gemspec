@@ -28,7 +28,6 @@ all from the command line using Capistrano.
   gem.require_paths = ['lib']
   gem.version       = Contao::VERSION
 
-
   # Runtime dependencies
   gem.add_dependency 'rake'
   gem.add_dependency 'activesupport'
