@@ -6,9 +6,7 @@ module TechnoGate
           @options = options
         end
 
-        def generate
-
-        end
+        def generate; end
       end
     end
   end

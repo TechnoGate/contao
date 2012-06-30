@@ -10,26 +10,26 @@ module TechnoGate
           @colored_output = "\e[0;34mContao>>\e[0m \e[0;32m#{@message}\e[0m"
           @options = {title: "Hello, World!"}
 
-          ::Guard::UI.stub(:color_enabled?).and_return(false)
+          UI.stub(:color_enabled?).and_return(false)
         end
 
         it {should respond_to :notify}
 
         it "should call guard ui" do
-          ::Guard::UI.should_receive(:info).with(@output, {})
+          UI.should_receive(:info).with(@output, {})
 
           subject.notify(@message)
         end
 
         it "should send whatever options passed to the info method" do
-          ::Guard::UI.should_receive(:info).with(@output, @options)
+          UI.should_receive(:info).with(@output, @options)
 
           subject.notify(@message, @options)
         end
 
         it "should use colors if enabled" do
-          ::Guard::UI.should_receive(:color_enabled?).once.and_return(true)
-          ::Guard::UI.should_receive(:info).with(@colored_output, @options)
+          UI.should_receive(:color_enabled?).once.and_return(true)
+          UI.should_receive(:info).with(@colored_output, @options)
 
           subject.notify(@message, @options)
         end
@@ -48,26 +48,26 @@ module TechnoGate
           @colored_output = "\e[0;34mContao>>\e[0m \e[0;33m#{@message}\e[0m"
           @options = {title: "Hello, World!"}
 
-          ::Guard::UI.stub(:color_enabled?).and_return(false)
+          UI.stub(:color_enabled?).and_return(false)
         end
 
         it {should respond_to :warn}
 
         it "should call guard ui" do
-          ::Guard::UI.should_receive(:info).with(@output, {})
+          UI.should_receive(:info).with(@output, {})
 
           subject.warn(@message)
         end
 
         it "should send whatever options passed to the info method" do
-          ::Guard::UI.should_receive(:info).with(@output, @options)
+          UI.should_receive(:info).with(@output, @options)
 
           subject.warn(@message, @options)
         end
 
         it "should use colors if enabled" do
-          ::Guard::UI.should_receive(:color_enabled?).once.and_return(true)
-          ::Guard::UI.should_receive(:info).with(@colored_output, @options)
+          UI.should_receive(:color_enabled?).once.and_return(true)
+          UI.should_receive(:info).with(@colored_output, @options)
 
           subject.warn(@message, @options)
         end
@@ -86,26 +86,26 @@ module TechnoGate
           @colored_output = "\e[0;34mContao>>\e[0m \e[0;31m#{@message}\e[0m"
           @options = {title: "Hello, World!"}
 
-          ::Guard::UI.stub(:color_enabled?).and_return(false)
+          UI.stub(:color_enabled?).and_return(false)
         end
 
         it {should respond_to :error}
 
         it "should call guard ui" do
-          ::Guard::UI.should_receive(:info).with(@output, {})
+          UI.should_receive(:info).with(@output, {})
 
           subject.error(@message)
         end
 
         it "should send whatever options passed to the info method" do
-          ::Guard::UI.should_receive(:info).with(@output, @options)
+          UI.should_receive(:info).with(@output, @options)
 
           subject.error(@message, @options)
         end
 
         it "should use colors if enabled" do
-          ::Guard::UI.should_receive(:color_enabled?).once.and_return(true)
-          ::Guard::UI.should_receive(:info).with(@colored_output, @options)
+          UI.should_receive(:color_enabled?).once.and_return(true)
+          UI.should_receive(:info).with(@colored_output, @options)
 
           subject.error(@message, @options)
         end

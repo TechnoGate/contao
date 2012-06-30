@@ -16,7 +16,7 @@ def print_help
 
     To generate a new project, use the following command:
 
-    	$ contao new /path/to/application
+      $ contao new /path/to/application
 
     The generated application will be created at /path/to/application and the
     application name would be set to the last component in the path, in this

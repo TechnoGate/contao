@@ -9,24 +9,15 @@ module TechnoGate
       include Singleton
 
       def initialize
-        super
-
-        init_config
         parse_global_config
-      end
 
-      def self.configure(&block)
-        instance.instance_eval(&block)
-      end
-
-      def self.config
-        instance.config
+        super
       end
 
       def linkify
         exhaustive_list_of_files_to_link(
-          Contao.expandify(Application.config.contao_path),
-          Contao.expandify(Application.config.contao_public_path)
+          Rails.root.join(config.contao_path),
+          Rails.public_path
         ).each do |list|
           FileUtils.ln_s list[0], list[1]
         end
@@ -36,16 +27,20 @@ module TechnoGate
         instance.linkify
       end
 
-      def self.load_tasks
-        Dir["#{File.expand_path '../tasks', __FILE__}/**/*.rake"].each {|f| load f}
-      end
-
       def name
-        self.config.application_name || File.basename(Contao.root)
+        config.application_name || File.basename(Rails.root)
       end
 
       def self.name
         instance.name
+      end
+
+      def config
+        Rails.application.config
+      end
+
+      def self.config
+        instance.config
       end
 
       def self.default_global_config(options = {})
@@ -77,15 +72,10 @@ module TechnoGate
 
       protected
 
-      # Initialize the config
-      def init_config
-        self.config = OpenStruct.new
-      end
-
       # Parse the global yaml configuration file
       def parse_global_config
         if File.exists? global_config_path
-          self.config.global = YAML.load(File.read(global_config_path)).to_openstruct
+          config.contao_global_config = YAML.load(File.read(global_config_path)).to_openstruct
         end
       end
 
