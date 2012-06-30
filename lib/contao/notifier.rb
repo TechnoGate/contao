@@ -1,4 +1,4 @@
-require 'guard'
+require 'contao/ui'
 
 module TechnoGate
   module Contao
@@ -22,13 +22,13 @@ module TechnoGate
       def say(message, options = {})
         color = options.delete(:color)
 
-        if ::Guard::UI.send(:color_enabled?)
+        if UI.send(:color_enabled?)
           message = "\e[0;34mContao>>\e[0m \e[0;#{color}m#{message}\e[0m"
         else
           message = "Contao>> #{message}"
         end
 
-        ::Guard::UI.info(message, options)
+        UI.info(message, options)
       end
     end
   end

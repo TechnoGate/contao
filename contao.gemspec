@@ -34,7 +34,6 @@ all from the command line using Capistrano.
   gem.add_dependency 'activesupport'
   gem.add_dependency 'parseconfig'
   gem.add_dependency 'highline'
-  gem.add_dependency 'guard'
 
   # Development dependencies
   gem.add_development_dependency 'rspec'

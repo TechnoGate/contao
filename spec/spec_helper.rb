@@ -29,7 +29,7 @@ RSpec.configure do |c|
     end
 
     silence_warnings do
-      ::Guard::UI = stub('Guard UI').as_null_object
+      TechnoGate::Contao::UI = stub('Guard UI').as_null_object
     end
   end
 end
