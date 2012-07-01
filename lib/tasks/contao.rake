@@ -107,7 +107,7 @@ namespace :contao do
       config.db_port       = config.mysql.port
       config.db_username   = config.mysql.user
       config.db_password   = config.mysql.pass
-      config.db_name       = TechnoGate::Contao::Application.name
+      config.db_database   = TechnoGate::Contao::Application.name
 
       localconfig_template = Rails.root.join 'config/examples/localconfig.php.erb'
       localconfig_path = public_path.join 'system/config/localconfig.php'
