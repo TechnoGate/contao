@@ -110,7 +110,9 @@ detailed information
 ### Work on the project
 
 To be able to develop with this version of Contao, you first need to
-understand how it actually works.
+understand how it actually works, take a look at the [project
+structure](#project-structure) for more information on how files are
+organised
 
 Contao is integrated with Rails, actually only the asset pipeline
 functionality is being used, Compass is also integrated with the project
@@ -275,7 +277,7 @@ entire Ruby community which are simply **awesome**.
 ## Project structure
 
 ```shell
-.
+contao_template
 ├── Capfile
 ├── Gemfile
 ├── Procfile
