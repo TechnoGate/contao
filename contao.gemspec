@@ -4,7 +4,7 @@ require File.expand_path('../lib/contao/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ['Wael Nasreddine']
   gem.email         = ['wael.nasreddine@gmail.com']
-  gem.description   = %q{Contao Integration with Rails.}
+  gem.description   = 'Contao Integration with Rails Asset Pipeline, Compass and Capistrano'
   gem.summary       = <<-EOS
 This gem will help you to quickly generate an application using Contao
 CMS which has pre-built support for Sass, Compass, CoffeeScript, Jasmine
