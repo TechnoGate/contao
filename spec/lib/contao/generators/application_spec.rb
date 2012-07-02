@@ -21,7 +21,6 @@ module TechnoGate
             klass.any_instance.stub :clone_template
             klass.any_instance.stub :rename_project
             klass.any_instance.stub :run_bundle_install
-            klass.any_instance.stub :run_cap_multistage_setup
             klass.any_instance.stub :commit_everything
             klass.any_instance.stub :replace_origin_with_template
             System.stub(:system)
@@ -31,7 +30,6 @@ module TechnoGate
             subject.should_receive(:clone_template).once.ordered
             subject.should_receive(:rename_project).once.ordered
             subject.should_receive(:run_bundle_install).once.ordered
-            subject.should_receive(:run_cap_multistage_setup).once.ordered
             subject.should_receive(:commit_everything).once.ordered
             subject.should_receive(:replace_origin_with_template).once.ordered
 
@@ -87,31 +85,6 @@ module TechnoGate
             System.should_receive(:system).with('bundle', 'install').once.and_return true
 
             subject.send :run_bundle_install
-          end
-        end
-
-        describe "#run_cap_multistage_setup", :fakefs do
-          before :each do
-            stub_filesystem!
-          end
-
-          it {should respond_to :run_cap_multistage_setup}
-
-          it "should change the folder to the path" do
-            Dir.should_receive(:chdir).once
-
-            subject.send :run_cap_multistage_setup
-          end
-
-          it "should run cap multistage:setup" do
-            System.should_receive(:system).with(
-              'bundle',
-              'exec',
-              'cap',
-              'multistage:setup'
-            ).once.and_return true
-
-            subject.send :run_cap_multistage_setup
           end
         end
 

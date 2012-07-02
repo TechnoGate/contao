@@ -11,7 +11,6 @@ module TechnoGate
           clone_template
           rename_project
           run_bundle_install
-          run_cap_multistage_setup
           commit_everything
           replace_origin_with_template
         end
@@ -32,12 +31,6 @@ module TechnoGate
         def run_bundle_install
           Dir.chdir project_path do
             Contao::System.safe_system 'bundle', 'install'
-          end
-        end
-
-        def run_cap_multistage_setup
-          Dir.chdir project_path do
-            Contao::System.safe_system 'bundle', 'exec', 'cap', 'multistage:setup'
           end
         end
 
