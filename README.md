@@ -87,7 +87,7 @@ Generating a new project is very easy, just use the following command:
 contao new /path/to/my_project
 ```
 
-This command will generate an application called `my\_project` in the
+This command will generate an application called `my_project` in the
 folder `/path/to`, the application name is very important as it defaults
 to the name of your database, check the [Database name](#database-name)
 section below for more information.
