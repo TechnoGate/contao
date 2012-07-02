@@ -272,6 +272,97 @@ entire Ruby community which are simply **awesome**.
   folder, upload it and then extract it on the server, as it would be
   much faster to upload one file.
 
+## Project structure
+
+```shell
+.
+├── Capfile
+├── Gemfile
+├── Procfile
+├── Rakefile
+├── app
+│   └── assets
+│       ├── images
+│       ├── javascripts
+│       │   └── application.js
+│       └── stylesheets
+│           ├── application.css.sass
+│           ├── definitions
+│           │   ├── _all.sass
+│           │   ├── _mixins.sass
+│           │   ├── _sprites.sass
+│           │   └── _variables.sass
+│           └── thirdparty
+│               └── _pie.sass
+├── config
+│   ├── application.rb
+│   ├── boot.rb
+│   ├── compass.rb
+│   ├── deploy
+│   │   ├── development.rb
+│   │   └── production.rb
+│   ├── deploy.rb
+│   ├── environment.rb
+│   ├── environments
+│   │   ├── development.rb
+│   │   ├── production.rb
+│   │   └── test.rb
+│   ├── examples
+│   │   └── localconfig.php.erb
+│   ├── initializers
+│   │   ├── secret_token.rb
+│   │   └── session_store.rb
+│   └── routes.rb
+├── config.ru
+├── contao
+│   ├── plugins
+│   ├── system
+│   │   ├── drivers
+│   │   ├── libraries
+│   │   │   ├── Spyc.php -> ../../../lib/contao/libraries/spyc/spyc.php
+│   │   └── modules
+│   │       ├── BackupDB
+│   │       ├── assets
+│   │       ├── efg
+│   │       ├── favicon
+│   │       ├── googleanalytics
+│   │       ├── listing
+│   │       ├── parentslist
+│   │       ├── subcolumns
+│   │       ├── template-override
+│   │       ├── videobox
+│   │       └── videobox_vimeo
+├── lib
+│   ├── assets
+│   │   └── javascripts
+│   │       ├── form_default_values
+│   │       │   ├── autoload.js.coffee
+│   │       │   └── main.js.coffee
+│   │       ├── form_default_values.js
+│   │       └── slider.js.coffee
+│   ├── contao
+│   │   └── libraries
+│   │       └── spyc
+│   └── tasks
+├── public
+├── script
+│   └── rails
+├── spec
+│   └── javascripts
+│       ├── fixtures
+│       │   └── slider.html
+│       ├── helpers
+│       │   └── spec_helper.js.coffee
+│       ├── slider_spec.coffee
+│       └── support
+│           └── jasmine.yml
+└── vendor
+    └── assets
+        ├── javascripts
+        └── stylesheets
+```
+
+
 ## License
 
 ### This code is free to use under the terms of the MIT license.
