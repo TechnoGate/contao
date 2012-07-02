@@ -7,7 +7,6 @@ rvm:
 matrix:
   allow_failures:
     - rvm: rbx-19mode     # We have some failing specs we need to take care of
-    - rvm: jruby-19mode   # This is more complicated as we need the oily_ong gem but it doesn't work for Jruby
 notifications:
   recipients:
     - wael.nasreddine@gmail.com
