@@ -33,6 +33,12 @@ If you're running a ruby version below 1.9, please install a 1.9 version
 by following the guide at the [Rbenv
 Installer](https://github.com/fesplugas/rbenv-installer) project.
 
+Contao depends on Qt (for headless javascript testing using
+[jasmine](https://github.com/pivotal/jasmine) and
+[jasmine-headless-webkit](http://johnbintz.github.com/jasmine-headless-webkit),
+to install it, refer to [Capybara Webkit
+Installation](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
+
 ## Installation
 
 Install contao with the following command
@@ -44,6 +50,18 @@ gem install contao
 Don't forget to run `rbenv rehash` if you are using
 **[rbenv](https://github.com/sstephenson/rbenv)** as this gem provides
 an executable.
+
+## Database name
+
+Locally, the database name is the same as the application name, so if
+you named your project is named **my_project**, the database name will be
+named **my_project**.
+
+On the server, Capistrano will append the environment on which the
+deployment occured (check the deployment section below for more
+information) to the application name, so if your project is named
+**my_project** and you are deployment to the staging environment, the
+database name would default to **my_project_staging**
 
 ## Usage
 
@@ -91,23 +109,112 @@ detailed information
 To be able to develop with this version of Contao, you first need to
 understand how it actually works.
 
-TODO: Continue this section
+Contao is integrated with Rails, actually only the asset pipeline
+functionality is being used, Compass is also integrated with the project
+so you can develop your CSS using Compass functions and mixins as well
+as sprites.
 
-## Database name
+To start working on the project, you need to run the rails server by
+running
 
-Locally, the database name is the same as the application name, so if
-you named your project is named **my_project**, the database name will be
-named **my_project**.
+```bash
+bundle exec foreman start
+```
 
-On the server, Capistrano will append the environment on which the
-deployment occured (check the deployment section below for more
-information) to the application name, so if your project is named
-**my_project** and you are deployment to the staging environment, the
-database name would default to **my_project_staging**
+This will start a rails process on port **9876** and serve the assets
+from their, The [Contao Assets
+Extension](https://github.com/TechnoGate/contao_assets) automatically
+detect that you are running in development and will use assets from the
+rails server directly.
 
 ## Deploying
 
-TODO: Write this section
+### Introduction
+
+Before deploying the project, you need to edit Capistrano config files
+located at `config/deploy.rb` and `config/deploy/development.rb`.
+
+For a standard project tracked by [Git](http://git-scm.com), you do not
+need to edit the file `config/deploy.rb` but you **do need** to edit
+`config/deploy/development.rb` which is auto-documented.
+
+### Multistage
+
+Capistrano comes with support for multiple stages, you could have
+`development`, `staging`, `production` or any other stage, all you need
+to have is the stage name mentioned in `config/deploy.rb`
+
+```ruby
+set :stages, ['development', 'staging', 'production']
+```
+
+and a config file by the same name of the stage located at
+`config/deploy/`, the Template is pre-configured for **development**,
+**staging** and **production** but comes with only one config file
+for **development**, to configure another stage just duplicate the
+**development** file to the desired stage.
+
+### Deploying
+
+#### Provisioning the server
+
+To deploy your project, you need to first configure the server, if you
+are deploying to a server managed by yourself and using **Nginx**
+(Apache templates will be added later), you can generate a config file
+for your new site, add a user to the database and create the database
+using the following command:
+
+```shell
+bundle exec cap development deploy:server:setup
+```
+
+The above step is optional and only useful if you manage your own
+server, but if you are using a shared server (Hosting), running that
+command would not be possible as you don't have root access.
+
+NOTE: This command must be used only once per stage per project.
+
+#### Setup the project
+
+Before deploying you need to setup the project structure, generate the
+**localconfig.php**, and the **.htaccess**, to do that just run
+
+```shell
+bundle exec cap development deploy:setup
+```
+
+NOTE: This command must be used only once per stage per project.
+
+#### Deploy the project
+
+To deploy the project simply run
+
+```shell
+bundle exec cap development deploy
+```
+
+#### Multistage
+
+As you may have noticed, all the above commands had the **development**
+stage as the first argument (first argument to **cap**), to deploy to
+any other stage just use that stage's name instead.
+
+The contao template comes pre-configured with **development** as the
+**default stage**
+
+```ruby
+set :default_stage, :development
+```
+
+So if you omit the stage (the first argument) when calling **cap**
+
+```shell
+bundle exec cap deploy
+```
+
+The stage would be set to whatever `default\_stage` is set to, in this
+case **development**
+
 
 ## Contributing
 
