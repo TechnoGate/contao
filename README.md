@@ -233,8 +233,6 @@ Or
 For bugs and feature request, please use __Github issues__, for other
 requests, you may use:
 
-- [Google Groups](http://groups.google.com/group/janus-vimius)
-- [Github private message](https://github.com/inbox/new/eMxyzptlk)
 - Email: [contact@technogate.fr](mailto:contact@technogate.fr)
 
 Don't forget to follow me on [Github](https://github.com/eMxyzptlk) and
