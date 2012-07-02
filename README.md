@@ -250,6 +250,28 @@ awesome and easy to use CMS, and of course all Contao contributors, and
 Finally The [Rails Core Team](http://rubyonrails.org/core) and the
 entire Ruby community which are simply **awesome**.
 
+## TODO
+
+* The `contao` folder is a mess and can become a lot messier pretty
+  quickly so we need to extract each extension into it's folder (make it
+  modularized)
+* Add Capistrano tasks for Starting/Stopping/Reloading Nginx
+* Add Capistrano support for Apache
+* The install password should be different for each website and the
+  developer should be able to modify it, Basically the install password
+  in `~/.contao/config.yml` should be stored in clear-text (or encrypted
+  but decryptable), and once we generate a new project we should generate
+  a new salt, store it in an initializer, generate the install password
+  and store it in an initializer as well
+* A new rake task should be created to help the user easly modify the
+  install password
+* The **encryption_key** should be generated for each project and not
+  stored in the `~/.contao/config.yml`
+* The assets takes a considerably amount of time to be uploaded,
+  specially if you have many images, we should compress the entire
+  folder, upload it and then extract it on the server, as it would be
+  much faster to upload one file.
+
 ## License
 
 ### This code is free to use under the terms of the MIT license.
