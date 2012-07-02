@@ -241,6 +241,12 @@ requests, you may use:
 Don't forget to follow me on [Github](https://github.com/eMxyzptlk) and
 [Twitter](https://twitter.com/eMxyzptlk) for news and updates.
 
+## Credits
+
+I'd like to give a special thanks to the guys at [Agence
+Durable](http://www.agence-durable.com) for supporting and testing this
+project.
+
 ## License
 
 ### This code is free to use under the terms of the MIT license.
