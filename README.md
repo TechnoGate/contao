@@ -212,7 +212,7 @@ So if you omit the stage (the first argument) when calling **cap**
 bundle exec cap deploy
 ```
 
-The stage would be set to whatever `default\_stage` is set to, in this
+The stage would be set to whatever `default_stage` is set to, in this
 case **development**
 
 
