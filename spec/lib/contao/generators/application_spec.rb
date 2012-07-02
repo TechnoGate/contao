@@ -107,7 +107,7 @@ module TechnoGate
               'git',
               'commit',
               '-m',
-              'Import generated files inside the repository'
+              'Freshly generated project'
             ).once.ordered.and_return true
 
             subject.send :commit_everything

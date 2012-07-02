@@ -41,7 +41,7 @@ module TechnoGate
               'git',
               'commit',
               '-m',
-              'Import generated files inside the repository'
+              'Freshly generated project'
             )
           end
         end
