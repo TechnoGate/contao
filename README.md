@@ -22,7 +22,7 @@ all from the command line using Capistrano.
 
 Before installing the gem, you need to make you are running on a Ruby
 version 1.9.2 or greater as this Gem and most of it's dependencies do
-not support Ruby 1.8, to check the version you are running, uee the
+not support Ruby 1.8, to check the version you are running, using the
 following command:
 
 ```bash
