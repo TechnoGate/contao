@@ -245,7 +245,10 @@ Don't forget to follow me on [Github](https://github.com/eMxyzptlk) and
 
 I'd like to give a special thanks to the guys at [Agence
 Durable](http://www.agence-durable.com) for supporting and testing this
-project.
+project, [Leo Feyer](https://github.com/leofeyer) for creating an
+awesome and easy to use CMS, and of course all Contao contributors, and
+Finally The [Rails Core Team](http://rubyonrails.org/core) and the
+entire Ruby community which are simply **awesome**.
 
 ## License
 
