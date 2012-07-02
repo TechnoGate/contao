@@ -6,8 +6,11 @@ Status](https://secure.travis-ci.org/TechnoGate/contao.png?branch=master)](http:
 [![Gemnasium](https://gemnasium.com/TechnoGate/contao.png)](https://gemnasium.com/TechnoGate/contao)
 
 This gem will help you to quickly generate an application using [Contao
-CMS](http://www.contao.org/en/) which has pre-built support for Sass,
-Compass, CoffeeScript, Jasmine and Capistrano.
+CMS](http://www.contao.org/en/) which has pre-built support for
+[Sass](http://sass-lang.com), [Compass](http://compass-style.org),
+[CoffeeScript](http://coffeescript.org),
+[Jasmine](http://pivotal.github.com/jasmine/) and
+[Capistrano](https://github.com/capistrano/capistrano).
 
 It also feature hashed assets served by the [Contao Assets
 extension](https://github.com/TechnoGate/contao_assets), which allows you
