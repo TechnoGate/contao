@@ -15,6 +15,15 @@ end
 
 class Rails::Railtie::Configuration
   def contao
-    @contao_configuration ||= ActiveSupport::OrderedOptions.new
+    @contao_configuration ||= default_contao_configuration
+  end
+
+  private
+
+  def default_contao_configuration
+    cc = ActiveSupport::OrderedOptions.new
+    cc.smtp = ActiveSupport::OrderedOptions.new
+    cc.smtp.enabled = false
+    cc
   end
 end
