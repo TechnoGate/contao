@@ -39,4 +39,5 @@ all from the command line using Capistrano.
   gem.add_development_dependency 'fakefs'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'pry-doc'
+  gem.add_development_dependency 'binding_of_caller'
 end
