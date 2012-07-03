@@ -262,6 +262,55 @@ bundle exec cap deploy
 The stage would be set to whatever `default_stage` is set to, in this
 case **development**
 
+## Useful Capistrano Tasks
+
+### Database import/export
+
+You do not need to use SSH or phpMyAdmin to export or import a database
+dump, in fact capistrano already knows the credentials to access the
+database, so We added a few tasks to help ease this process.
+
+#### Importing a database dump
+
+To import a database dump, which is very useful for deploying a website
+that was in development on your localhost, you can use the task
+`db:import` (Remember that all the following commands can
+optionally take the stage as the first argument, when omited the stage
+is set to the `default_stage`). To import `/path/to/project.sql` for
+example, you only have to use the command
+
+```shell
+bundle exec cap db:import /path/to/project.sql
+```
+
+The above command will first backup your database on the server (check
+`/backups` relative to your project directory of course), and then
+import the project.sql into it, however it's up to you to make sure your
+SQL dump file has `DROP TABLE IF EXISTS` statements to overwrite the
+tables.
+
+#### Exporting a database dump
+
+To export a database dump, which is very useful to import changes from
+the server to your local development machine
+
+```shell
+bundle exec cap db:export
+```
+
+This file will download the SQL dump file to a random file in `/tmp` but
+you can optionally give it an argument which would be used as a
+filename. This command will also backup the database on the server.
+
+### Content import/export
+
+#### Importing content
+
+TODO: Write this section.
+
+#### Exporting content
+
+TODO: Write this section.
 
 ## Contributing
 
