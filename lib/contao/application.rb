@@ -74,9 +74,7 @@ module TechnoGate
 
       # Parse the global yaml configuration file
       def parse_global_config
-        if File.exists? global_config_path
-          config.contao.global = YAML.load(File.read(global_config_path)).to_openstruct
-        end
+        config.contao.global = YAML.load(File.read(global_config_path)).to_openstruct
       end
 
       # Return an array of arrays of files to link
