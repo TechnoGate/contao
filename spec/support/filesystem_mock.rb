@@ -59,7 +59,7 @@ module ContaoTemplate
     # -- all .rb files in that directory are automatically loaded.
 
     # The application name
-    config.application_name = '#{application_name}'
+    config.contao.application_name = '#{application_name}'
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(\#{config.root}/extras)
@@ -80,7 +80,7 @@ module ContaoTemplate
     config.assets.version = '1.0'
 
     # Contao configurations
-    config.contao_path = 'contao'
+    config.contao.path = 'contao'
   end
 end
     EOS

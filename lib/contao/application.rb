@@ -16,7 +16,7 @@ module TechnoGate
 
       def linkify
         exhaustive_list_of_files_to_link(
-          Rails.root.join(config.contao_path),
+          Rails.root.join(config.contao.path),
           Rails.public_path
         ).each do |list|
           FileUtils.ln_s list[0], list[1]
@@ -28,7 +28,7 @@ module TechnoGate
       end
 
       def name
-        config.application_name || File.basename(Rails.root)
+        config.contao.application_name || File.basename(Rails.root)
       end
 
       def self.name

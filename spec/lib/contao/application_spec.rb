@@ -25,7 +25,7 @@ module TechnoGate
       describe '#linkify' do
         it "should call #exhaustive_list_of_files_to_link" do
           subject.should_receive(:exhaustive_list_of_files_to_link).with(
-            Rails.root.join(Rails.application.config.contao_path),
+            Rails.root.join(Rails.application.config.contao.path),
             Rails.public_path
           ).once.and_return []
 
@@ -62,7 +62,7 @@ module TechnoGate
         describe "without it being set in the configuration" do
           before :each do
             Rails.config.tap do |config|
-              config.application_name = nil
+              config.contao.application_name = nil
             end
           end
 
@@ -78,7 +78,7 @@ module TechnoGate
         describe "with it being set in the configuration" do
           before :each do
             Rails.config.tap do |config|
-              config.application_name = 'my_super_awesome_project'
+              config.contao.application_name = 'my_super_awesome_project'
             end
           end
 
