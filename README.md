@@ -84,6 +84,11 @@ Contao depends on Qt (for headless javascript testing using
 to install it, refer to [Capybara Webkit
 Installation](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
 
+And Finally, you need [Git](http://git-scm.com) as the whole template
+has been built for it, you can also work with a different SCM, but you
+need to get the template file yourself, initialize it and track it with
+your favorite SCM, something I strongly vote against.
+
 ## Installation
 
 Install contao with the following command
