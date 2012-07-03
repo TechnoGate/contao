@@ -9,4 +9,4 @@ require 'contao/password'
 # Contao
 require 'contao/application'
 require 'contao/notifier'
-require 'contao/railtie' if defined?(Rails)
+require 'contao/railties' if defined?(::Rails)
