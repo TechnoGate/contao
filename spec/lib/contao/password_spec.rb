@@ -53,12 +53,12 @@ module TechnoGate
             subject.send(:random).should_not be_nil
           end
 
-          it 'should honor the requested number of chars' do
-            subject.send(:random, 14).size.should == 14
+          it 'should honor the requested length' do
+            subject.send(:random, 14).size.should == 28
           end
 
-          it 'should be 50 chars by default' do
-            subject.send(:random).size.should == 50
+          it 'should be 128 chars by default' do
+            subject.send(:random).size.should == 128
           end
 
           it 'should be a string' do

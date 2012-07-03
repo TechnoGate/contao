@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'securerandom'
 
 module TechnoGate
   module Contao
@@ -28,15 +29,11 @@ module TechnoGate
       end
 
       def self.generate_salt
-        Digest::SHA1.hexdigest(random)[0...SALT_SIZE]
+        random[0...SALT_SIZE]
       end
 
-      def self.random(length = 50)
-        (
-          ('a'..'z').to_a +
-          ('A'..'Z').to_a +
-          (0..9).to_a
-        ).shuffle[0, length].join
+      def self.random(length = 64)
+        SecureRandom.hex length
       end
     end
   end
