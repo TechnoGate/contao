@@ -17,6 +17,15 @@ extension](https://github.com/TechnoGate/contao_assets), which allows you
 to have an md5 appended to each of your assets URL on the production
 site.
 
+```html
+<link rel="stylesheet" type="text/css" href="/resources/application-c6e2457d9ccce0f344c50e5bcc12fcdc.css" />
+<script type="text/javascript" src="/resources/application-327af3660470fb1c3f8e6593670cfc1e.js"></script>
+```
+
+All the images references by the CSS file, are also hashed, so when you
+deploy a new version of your image and/or your CSS, you are absolutely
+sure that your visitors do not get a cached copy of your old asset.
+
 The integration with Capistrano allows you to quickly deploy, copy
 assets, import database and even upload media such as images and PDFs
 all from the command line using Capistrano.
