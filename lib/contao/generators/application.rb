@@ -56,14 +56,6 @@ module TechnoGate
         def config_application_path
           "#{project_path}/config/application.rb"
         end
-
-        def project_path
-          @options[:path]
-        end
-
-        def project_name
-          File.basename project_path
-        end
       end
     end
   end
