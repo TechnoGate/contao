@@ -28,7 +28,7 @@ sure that your visitors do not get a cached copy of your old asset.
 
 ```sass
 div
-  +backgroun(image-url('body.jpg') no-repeat top center
+  +background(image-url('body.jpg') no-repeat top center
 ```
 
 Would generate:
