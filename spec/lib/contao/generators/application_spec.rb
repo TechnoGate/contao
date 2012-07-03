@@ -64,7 +64,7 @@ module TechnoGate
             subject.send :rename_project
 
             File.read('/root/my_awesome_project/config/application.rb').should =~
-              /config\.application_name\s+=\s+'my_awesome_project'/
+              /config\.contao\.application_name\s+=\s+'my_awesome_project'/
           end
         end
 
