@@ -10,7 +10,6 @@ $: << File.expand_path('../../lib/contao.rb', __FILE__)
 require 'active_support/core_ext/kernel/reporting'
 require 'contao'
 require 'fakefs/spec_helpers'
-require 'pry'
 
 Dir["#{File.expand_path('../support', __FILE__)}/**/*.rb"].each {|f| require f}
 
