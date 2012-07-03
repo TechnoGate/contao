@@ -37,4 +37,6 @@ all from the command line using Capistrano.
   # Development dependencies
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'fakefs'
+  gem.add_development_dependency 'pry'
+  gem.add_development_dependency 'pry-doc'
 end
