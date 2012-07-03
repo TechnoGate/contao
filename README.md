@@ -26,9 +26,42 @@ All the images references by the CSS file, are also hashed, so when you
 deploy a new version of your image and/or your CSS, you are absolutely
 sure that your visitors do not get a cached copy of your old asset.
 
-The integration with Capistrano allows you to quickly deploy, copy
-assets, import database and even upload media such as images and PDFs
-all from the command line using Capistrano.
+```sass
+div
+  +backgroun(image-url('body.jpg') no-repeat top center
+```
+
+Would generate:
+
+```css
+div {
+  background: url(/resources/body-fc4a0f5f0b0f9ceec32bde5d15928467.jpg) no-repeat top center;
+}
+```
+
+Compass gives great power over your CSS, one most-wanted feature is the
+sprites, so having one PNG file for all your backgrounds is just
+awesome, the generate CSS looks like this
+
+```sass
+div
+  +background(sprite($background, body))
+```
+
+Would generate:
+
+```css
+div {
+  background: url(/resources/background-sbd69a8307b-a00c8f7a8536397c6279726316eae16f.png) 0 -3089px;
+}
+```
+
+Check [Compass Sprites
+Documentation](http://compass-style.org/help/tutorials/spriting)
+
+Finally, the integration with Capistrano allows you to quickly deploy,
+copy assets, import database and even upload media such as images and
+PDFs all from the command line using Capistrano.
 
 ## Pre-requisites
 
