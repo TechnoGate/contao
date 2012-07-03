@@ -22,15 +22,15 @@ RSpec.configure do |c|
   c.include FakeFS::SpecHelpers, :fakefs
 
   c.before :each do
-    Rails.env = 'development'
-    Rails.root = @root = '/root/my_awesome_project'
+    Rails.env  = 'development'
+    Rails.root = '/root/my_awesome_project'
 
-    Rails.config.tap do |config|
-      config.contao_path = 'contao'
+    Rails.application.config.tap do |config|
+      config.contao.path = 'contao'
     end
 
     silence_warnings do
-      TechnoGate::Contao::UI = stub('Guard UI').as_null_object
+      TechnoGate::Contao::UI = stub('UI').as_null_object
     end
   end
 end

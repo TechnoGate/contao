@@ -1,3 +1,5 @@
+require 'active_support/ordered_options'
+
 module Rails
   def self.env=(env)
     @@env = env
@@ -16,7 +18,13 @@ module Rails
   end
 
   def self.config
-    @config ||= OpenStruct.new
+    @@config ||= begin
+                  cc              = ActiveSupport::OrderedOptions.new
+                  cc.contao       = ActiveSupport::OrderedOptions.new
+                  cc.smtp         = ActiveSupport::OrderedOptions.new
+                  cc.smtp.enabled = false
+                  cc
+                end
   end
 
   def self.application

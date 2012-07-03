@@ -88,7 +88,7 @@ namespace :contao do
   desc "Generate the localconfig.php"
   task :generate_localconfig do
     require 'active_support/core_ext/object/blank'
-    config = TechnoGate::Contao::Application.config.contao_global_config
+    config = TechnoGate::Contao::Application.config.contao.global_config
 
     if !config || config.install_password.blank? || config.encryption_key.blank?
       message = <<-EOS

@@ -14,11 +14,11 @@ module TechnoGate
       describe "Global Config" do
 
         it "should parse the global config file if the file exists" do
-          subject.config.contao_global_config.should_not be_empty
+          subject.config.contao.global_config.should_not be_empty
         end
 
         it "should correctly parse the global config" do
-          subject.config.contao_global_config.install_password.should == 'some install password'
+          subject.config.contao.global_config.install_password.should == 'some install password'
         end
       end
 
