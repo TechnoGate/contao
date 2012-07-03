@@ -2,8 +2,8 @@ def print_help
   puts <<-EOH.gsub(/ [ ]+/, ' ')
     Welcome to Contao!
 
-    This gem will help you to quickly generate an application using Contao
-    CMS which has pre-built support for Sass, Compass, CoffeeScript, Jasmine
+    This gem will help you to quickly develop a website using Contao CMS
+    which has pre-built support for Sass, Compass, CoffeeScript, Jasmine
     and Capistrano.
 
     It also feature hashed assets served by the Contao Assets extension,

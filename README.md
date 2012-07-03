@@ -5,7 +5,7 @@ Welcome to Contao!
 Status](https://secure.travis-ci.org/TechnoGate/contao.png?branch=master)](http://travis-ci.org/TechnoGate/contao)
 [![Gemnasium](https://gemnasium.com/TechnoGate/contao.png)](https://gemnasium.com/TechnoGate/contao)
 
-This gem will help you to quickly generate an application using [Contao
+This gem will help you to quickly develop a website using [Contao
 CMS](http://www.contao.org/en/) which has pre-built support for
 [Sass](http://sass-lang.com), [Compass](http://compass-style.org),
 [CoffeeScript](http://coffeescript.org),
