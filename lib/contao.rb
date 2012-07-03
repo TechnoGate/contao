@@ -3,10 +3,8 @@ require 'contao/core_ext/object'
 require 'singleton'
 require 'ostruct'
 
-module TechnoGate
-  module Contao
-  end
-end
+# Utilities
+require 'contao/password'
 
 # Contao
 require 'contao/application'
