@@ -85,6 +85,16 @@ namespace :contao do
     TechnoGate::Contao::Notifier.notify("The contao folder's permissions has been fixed.", title: "Contao Bootstrap")
   end
 
+  desc 'Generate an initializer'
+  task :generate_initializer do
+    require 'contao/generators/contao_initializer'
+
+    g = TechnoGate::Contao::Generators::ContaoInitializer.new path: Rails.root
+    g.generate
+
+    TechnoGate::Contao::Notifier.notify 'The contao initializer has been generated', title: 'Contao Generator'
+  end
+
   desc "Generate the localconfig.php"
   task :generate_localconfig do
     require 'active_support/core_ext/object/blank'

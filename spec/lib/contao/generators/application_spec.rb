@@ -6,8 +6,9 @@ module TechnoGate
     module Generators
       describe Application do
         let(:klass) { Application }
+
         subject {
-          Application.new path: @path
+          klass.new path: @path
         }
 
         before :each do

@@ -46,7 +46,6 @@ module TechnoGate
       def self.default_global_config(options = {})
         {
           'install_password' => '',
-          'encryption_key'   => '',
           'admin_email'      => 'admin@example.com',
           'time_zone'        => 'Europe/Paris',
           'mysql'            => {

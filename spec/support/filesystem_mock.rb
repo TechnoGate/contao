@@ -2,6 +2,7 @@ def stub_filesystem!(options = {})
   [
 
     '/root/my_awesome_project/config',
+    '/root/my_awesome_project/config/initializers',
     '/root/my_awesome_project/app/assets/javascripts',
     '/root/my_awesome_project/app/assets/stylesheets',
     '/root/my_awesome_project/app/assets/images',
@@ -25,11 +26,10 @@ end
 
 def stub_global_config_file!(config = {})
   config = TechnoGate::Contao::Application.default_global_config(
-    'install_password' => 'f0fb33dcebe5753f053b882bb49faefe7384f22e:7305d1f250f3481bac35f2839a2a4fd6',
-    'encryption_key'   => 'e626cd6b8fd219b3e1803dc59620d972'
+    'install_password' => 'password'
   ).merge(config)
 
-  config_file = TechnoGate::Contao::Application.instance.global_config_path
+  config_file = "#{ENV['HOME']}/.contao/config.yml"
 
   FileUtils.mkdir_p File.dirname(config_file)
   File.open(config_file, 'w') do |file|
