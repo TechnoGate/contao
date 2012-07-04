@@ -1,4 +1,5 @@
 require 'contao/generators/base'
+require 'contao/application'
 require 'contao/system'
 
 module TechnoGate
