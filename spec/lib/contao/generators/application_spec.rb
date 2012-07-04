@@ -22,6 +22,7 @@ module TechnoGate
             klass.any_instance.stub :clone_template
             klass.any_instance.stub :rename_project
             klass.any_instance.stub :run_bundle_install
+            klass.any_instance.stub :run_rake_contao_generate_initializer
             klass.any_instance.stub :commit_everything
             klass.any_instance.stub :replace_origin_with_template
             System.stub(:system)
@@ -31,6 +32,7 @@ module TechnoGate
             subject.should_receive(:clone_template).once.ordered
             subject.should_receive(:rename_project).once.ordered
             subject.should_receive(:run_bundle_install).once.ordered
+            subject.should_receive(:run_rake_contao_generate_initializer).once.ordered
             subject.should_receive(:commit_everything).once.ordered
             subject.should_receive(:replace_origin_with_template).once.ordered
 
@@ -76,16 +78,41 @@ module TechnoGate
 
           it {should respond_to :run_bundle_install}
 
-          it "should change the folder to the path" do
+          it 'should change the folder to the path' do
             Dir.should_receive(:chdir).once
 
             subject.send :run_bundle_install
           end
 
-          it "should run bundle install" do
+          it 'should run bundle install' do
             System.should_receive(:system).with('bundle', 'install').once.and_return true
 
             subject.send :run_bundle_install
+          end
+        end
+
+        describe '#run_rake_contao_generate_initializer', :fakefs do
+          before :each do
+            stub_filesystem!
+          end
+
+          it {should respond_to :run_rake_contao_generate_initializer}
+
+          it 'should change the folder to the path' do
+            Dir.should_receive(:chdir).once
+
+            subject.send :run_rake_contao_generate_initializer
+          end
+
+          it 'should run bundle exec rake contao:generate_initializer' do
+            System.should_receive(:system).with(
+              'bundle',
+              'exec',
+              'rake',
+              'contao:generate_initializer'
+            ).once.and_return true
+
+            subject.send :run_rake_contao_generate_initializer
           end
         end
 
@@ -145,4 +172,3 @@ module TechnoGate
     end
   end
 end
-

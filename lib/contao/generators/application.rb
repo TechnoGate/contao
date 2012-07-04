@@ -11,6 +11,7 @@ module TechnoGate
           clone_template
           rename_project
           run_bundle_install
+          run_rake_contao_generate_initializer
           commit_everything
           replace_origin_with_template
         end
@@ -31,6 +32,17 @@ module TechnoGate
         def run_bundle_install
           Dir.chdir project_path do
             Contao::System.safe_system 'bundle', 'install'
+          end
+        end
+
+        def run_rake_contao_generate_initializer
+          Dir.chdir project_path do
+            Contao::System.safe_system(
+              'bundle',
+              'exec',
+              'rake',
+              'contao:generate_initializer'
+            )
           end
         end
 
