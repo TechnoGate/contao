@@ -21,7 +21,7 @@ module ContaoTemplate
 
     # Enable SMTP ?
     config.contao.smtp.enabled = <%= config.smtp_enabled %>
-    <% if config.smtp_enabled %>
+    <%- if config.smtp_enabled %>
     # SMTP Host
     config.contao.smtp.host = '<%= config.smtp_host %>'
 
@@ -36,6 +36,6 @@ module ContaoTemplate
 
     # SMTP Port
     config.contao.smtp.port = <%= config.smtp_port %>
-    <% end %>
+    <%- end %>
   end
 end

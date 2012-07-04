@@ -10,7 +10,7 @@ module TechnoGate
         def generate
           config = build_config
           File.open initializer_path, 'w' do |f|
-            f.write ERB.new(File.read TEMPLATE).result(binding)
+            f.write ERB.new(File.read(TEMPLATE), nil, '-').result(binding)
           end
         end
 
