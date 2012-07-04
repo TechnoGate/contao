@@ -8,7 +8,8 @@ module TechnoGate
         def linkify
           exhaustive_list_of_files_to_link(
             Rails.root.join(config.contao.path),
-            Rails.public_path
+            Rails.public_path,
+            group: true
           ).each do |list|
             FileUtils.ln_s list[0], list[1]
           end
@@ -61,11 +62,13 @@ module TechnoGate
         # @param [String] Absolute path to folder from which to link
         # @param [String] Absolute path to folder to which to link
         # @return [Array]
-        def exhaustive_list_of_files_to_link(from, to)
+        def exhaustive_list_of_files_to_link(from, to, options = {})
           files = []
           Dir["#{from}/*"].each do |f|
             file = "#{to}/#{File.basename f}"
-            if File.exists? file
+            if options[:group]
+              exhaustive_list_of_files_to_link(f, to).each { |f| files << f }
+            elsif File.exists? file
               exhaustive_list_of_files_to_link(f, file).each { |f| files << f }
             else
               files << [f, file]
