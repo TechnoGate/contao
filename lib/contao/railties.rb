@@ -9,6 +9,9 @@ module TechnoGate
         Dir["#{File.expand_path '../../tasks', __FILE__}/**/*.rake"].each {|f| load f}
       end
 
+      initializer 'load_contao_configurations' do
+        TechnoGate::Contao::Application.load_global_config!
+      end
     end
   end
 end
