@@ -6,6 +6,18 @@ module Rails
   end
 
   def self.env
+    self
+  end
+
+  def self.production?
+    false
+  end
+
+  def self.to_s
+    @@env
+  end
+
+  def self.to_str
     @@env
   end
 

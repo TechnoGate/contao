@@ -96,21 +96,12 @@ namespace :contao do
 
   desc "Generate the localconfig.php"
   task :generate_localconfig => :environment do
-    require 'active_support/core_ext/object/blank'
-    config = Rails.application.config.contao.dup
+    require 'contao/generators/localconfig'
 
-    config.db_server_app = 'mysql'
-    config.db_hostname   = config.global.mysql.host
-    config.db_port       = config.global.mysql.port
-    config.db_username   = config.global.mysql.user
-    config.db_password   = config.global.mysql.pass
-    config.db_database   = config.application_name
-
-    localconfig_template = Rails.root.join 'config/examples/localconfig.php.erb'
-    localconfig_path = public_path.join 'system/config/localconfig.php'
-
-    localconfig = ERB.new(File.read(localconfig_template), nil, '-').result(binding)
-    File.open(localconfig_path, 'w') {|f| f.write localconfig }
+    TechnoGate::Contao::Generators::Localconfig.new(
+      path: Rails.root,
+      template: Rails.root.join('config/examples/localconfig.php.erb'),
+    ).generate
 
     TechnoGate::Contao::Notifier.notify 'The configuration file localconfig.php was generated successfully.'
   end

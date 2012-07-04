@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'contao/generators/contao_initializer.rb'
+require 'contao/generators/contao_initializer'
 
 module TechnoGate
   module Contao
