@@ -14,7 +14,7 @@ module TechnoGate
 
           FileUtils.mkdir_p File.dirname(global_config_path)
           File.open global_config_path, 'w' do |config|
-            config.write YAML.dump(Contao::Application.default_global_config)
+            config.write YAML.dump(default_global_config)
           end
 
           message = <<-EOS.gsub(/ [ ]+/, '').gsub("\n", ' ').chop
@@ -25,7 +25,11 @@ module TechnoGate
         end
 
         def global_config_path
-          Contao::Application.instance.global_config_path
+          Contao::Application.global_config_path
+        end
+
+        def default_global_config(options = {})
+          Contao::Application.send(:default_global_config, options)
         end
       end
     end

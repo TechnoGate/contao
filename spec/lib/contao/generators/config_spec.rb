@@ -40,7 +40,7 @@ module TechnoGate
             subject.generate
 
             File.read("#{ENV['HOME']}/.contao/config.yml").should ==
-              YAML.dump(Contao::Application.default_global_config)
+              YAML.dump(subject.send :default_global_config)
           end
 
           it "should call the Notifier" do

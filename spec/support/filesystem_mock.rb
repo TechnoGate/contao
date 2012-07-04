@@ -25,7 +25,7 @@ def stub_filesystem!(options = {})
 end
 
 def stub_global_config_file!(config = {})
-  config = TechnoGate::Contao::Application.default_global_config(
+  condig = TechnoGate::Contao::Application.send(:default_global_config,
     'install_password' => 'password'
   ).merge(config)
 

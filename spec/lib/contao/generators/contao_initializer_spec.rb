@@ -27,7 +27,7 @@ module TechnoGate
             },
           }
 
-          Contao::Application.instance.send :parse_global_config
+          Contao::Application.send :load_global_config!
         end
 
         it_should_behave_like "Generator"

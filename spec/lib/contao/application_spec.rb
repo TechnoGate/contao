@@ -3,12 +3,12 @@ require 'spec_helper'
 module TechnoGate
   module Contao
     describe Application, :fakefs do
-      subject { Contao::Application.instance }
+      subject { Contao::Application }
       let(:klass) { Contao::Application }
 
       before :each do
         stub_filesystem!(:global_config => {'install_password' => 'some install password'})
-        subject.send :parse_global_config
+        subject.load_global_config!
       end
 
       describe "Global Config" do
