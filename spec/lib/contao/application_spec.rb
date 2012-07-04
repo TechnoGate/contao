@@ -26,7 +26,8 @@ module TechnoGate
         it "should call #exhaustive_list_of_files_to_link" do
           subject.should_receive(:exhaustive_list_of_files_to_link).with(
             Rails.root.join(Rails.application.config.contao.path),
-            Rails.public_path
+            Rails.public_path,
+            group: true
           ).once.and_return []
 
           subject.linkify
@@ -47,11 +48,19 @@ module TechnoGate
       end
 
       describe '#exhaustive_list_of_files_to_link' do
-        it "should return the correct list of files" do
+        it 'should return the correct list of files' do
           list = subject.send :exhaustive_list_of_files_to_link, '/root/my_awesome_project/contao', '/root/my_awesome_project/public'
           list.should == [
-            ['/root/my_awesome_project/contao/non_existing_folder', '/root/my_awesome_project/public/non_existing_folder'],
-            ['/root/my_awesome_project/contao/system/modules/some_extension', '/root/my_awesome_project/public/system/modules/some_extension']
+            ['/root/my_awesome_project/contao/mod1', '/root/my_awesome_project/public/mod1'],
+            ['/root/my_awesome_project/contao/mod2', '/root/my_awesome_project/public/mod2']
+          ]
+        end
+
+        it 'should return the correct list of files when groups are enabled' do
+          list = subject.send :exhaustive_list_of_files_to_link, '/root/my_awesome_project/contao', '/root/my_awesome_project/public', group: true
+          list.should == [
+            ['/root/my_awesome_project/contao/mod1/non_existing_folder', '/root/my_awesome_project/public/non_existing_folder'],
+            ['/root/my_awesome_project/contao/mod2/system/modules/some_extension', '/root/my_awesome_project/public/system/modules/some_extension']
           ]
         end
       end
