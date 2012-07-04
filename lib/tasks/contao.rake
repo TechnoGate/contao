@@ -86,7 +86,7 @@ namespace :contao do
   end
 
   desc 'Generate an initializer'
-  task :generate_initializer do
+  task :generate_initializer => :environment do
     require 'contao/generators/contao_initializer'
 
     TechnoGate::Contao::Generators::ContaoInitializer.new(path: Rails.root).generate
