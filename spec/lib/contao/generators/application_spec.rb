@@ -15,10 +15,11 @@ module TechnoGate
           @path = '/root/my_awesome_project'
         end
 
-        it_should_behave_like "Generator"
+        it_should_behave_like 'Generator'
 
-        describe "#generate" do
+        describe '#generate' do
           before :each do
+            klass.any_instance.stub :require_global_config
             klass.any_instance.stub :clone_template
             klass.any_instance.stub :rename_project
             klass.any_instance.stub :run_bundle_install
@@ -28,7 +29,8 @@ module TechnoGate
             System.stub(:system)
           end
 
-          it "should have the following call stack" do
+          it 'should have the following call stack' do
+            subject.should_receive(:require_global_config).once.ordered
             subject.should_receive(:clone_template).once.ordered
             subject.should_receive(:rename_project).once.ordered
             subject.should_receive(:run_bundle_install).once.ordered
@@ -40,10 +42,28 @@ module TechnoGate
           end
         end
 
-        describe "#clone_template" do
+        describe '#require_global_config', :fakefs do
+          it {should respond_to :require_global_config}
+
+          it 'should check if the global config exists' do
+            File.should_receive(:exists?).with("#{ENV['HOME']}/.contao/config.yml").once.and_return true
+
+            subject.send :require_global_config
+          end
+
+          it 'should raise an error if it does not exist' do
+            File.should_receive(:exists?).with("#{ENV['HOME']}/.contao/config.yml").once.and_return false
+
+            expect do
+              subject.send :require_global_config
+            end.to raise_error
+          end
+        end
+
+        describe '#clone_template' do
           it {should respond_to :clone_template}
 
-          it "should clone the repository to path provided to the initializer" do
+          it 'should clone the repository to path provided to the initializer' do
             System.should_receive(:system).with(
               'git',
               'clone',
@@ -56,14 +76,14 @@ module TechnoGate
           end
         end
 
-        describe "#rename_project", :fakefs do
+        describe '#rename_project', :fakefs do
           before :each do
             stub_filesystem!(:application_name => 'contao_template')
           end
 
           it {should respond_to :rename_project}
 
-          it "should rename the application" do
+          it 'should rename the application' do
             subject.send :rename_project
 
             File.read('/root/my_awesome_project/config/application.rb').should =~
@@ -71,7 +91,7 @@ module TechnoGate
           end
         end
 
-        describe "#run_bundle_install", :fakefs do
+        describe '#run_bundle_install', :fakefs do
           before :each do
             stub_filesystem!
           end
@@ -116,20 +136,20 @@ module TechnoGate
           end
         end
 
-        describe "#commit_everything", :fakefs do
+        describe '#commit_everything', :fakefs do
           before :each do
             stub_filesystem!
           end
 
           it {should respond_to :commit_everything}
 
-          it "should change the folder to the path" do
+          it 'should change the folder to the path' do
             Dir.should_receive(:chdir).once
 
             subject.send :commit_everything
           end
 
-          it "should run git commit -am 'Generated project'" do
+          it 'should commit everything' do
             System.should_receive(:system).with('git', 'add', '-A', '.').once.ordered.and_return true
             System.should_receive(:system).with(
               'git',
@@ -149,13 +169,13 @@ module TechnoGate
 
           it {should respond_to :replace_origin_with_template}
 
-          it "should change the folder to the path" do
+          it 'should change the folder to the path' do
             Dir.should_receive(:chdir).once
 
             subject.send :replace_origin_with_template
           end
 
-          it "should replace origin with template" do
+          it 'should replace origin with template' do
             System.should_receive(:system).with('git', 'remote', 'rm', 'origin').once.ordered.and_return true
             System.should_receive(:system).with(
               'git',

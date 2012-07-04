@@ -8,6 +8,7 @@ module TechnoGate
         REPO_URL = 'https://github.com/TechnoGate/contao_template.git'
 
         def generate
+          require_global_config
           clone_template
           rename_project
           run_bundle_install
@@ -17,6 +18,12 @@ module TechnoGate
         end
 
         protected
+        def require_global_config
+          unless File.exists? TechnoGate::Contao::Application.global_config_path
+            raise 'Contao config file does not exist, please run "contao generate config" first'
+          end
+        end
+
         def clone_template
           git_args = "clone --recursive #{REPO_URL} #{project_path}"
           Contao::System.safe_system 'git', *git_args.split(' ')
