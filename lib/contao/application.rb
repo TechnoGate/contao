@@ -21,6 +21,7 @@ module TechnoGate
         def load_global_config!
           config.contao.global =
             YAML.load(File.read(global_config_path)).to_openstruct
+          config.contao.global.mysql.database = name
         end
 
         def config
