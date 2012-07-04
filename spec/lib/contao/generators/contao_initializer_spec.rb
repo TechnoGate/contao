@@ -26,6 +26,8 @@ module TechnoGate
               'port'    => 465,
             },
           }
+
+          Contao::Application.instance.send :parse_global_config
         end
 
         it_should_behave_like "Generator"
@@ -48,7 +50,6 @@ module TechnoGate
         end
 
         describe '#build_config' do
-
           it 'should build a config variable for the template' do
             Password.any_instance.stub(:to_s).and_return 'encrypted_password'
             SecureRandom.stub(:hex).and_return 'e626cd6b8fd219b3e1803dc59620d972'
