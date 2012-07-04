@@ -4,38 +4,42 @@
 
 module ContaoTemplate
   class Application < Rails::Application
-    # The install password is used by /contao/install.php page
-    config.contao.install_password = '<%= config.install_password %>'
+    if config.respond_to? :contao
 
-    # The encryption key is used by extensions
-    config.contao.encryption_key = '<%= config.encryption_key %>'
+      # The install password is used by /contao/install.php page
+      config.contao.install_password = '<%= config.install_password %>'
 
-    # The admin email
-    config.contao.admin_email = '<%= config.admin_email %>'
+      # The encryption key is used by extensions
+      config.contao.encryption_key = '<%= config.encryption_key %>'
 
-    # The time zone
-    config.contao.time_zone = '<%= config.time_zone %>'
+      # The admin email
+      config.contao.admin_email = '<%= config.admin_email %>'
 
-    # SMTP Configuration
-    # Configure contao to use an SMTP server
+      # The time zone
+      config.contao.time_zone = '<%= config.time_zone %>'
 
-    # Enable SMTP ?
-    config.contao.smtp.enabled = <%= config.smtp_enabled %>
-    <%- if config.smtp_enabled %>
-    # SMTP Host
-    config.contao.smtp.host = '<%= config.smtp_host %>'
+      # SMTP Configuration
+      # Configure contao to use an SMTP server
 
-    # SMTP User
-    config.contao.smtp.user = '<%= config.smtp_user %>'
+      # Enable SMTP ?
+      config.contao.smtp.enabled = <%= config.smtp_enabled %>
+      <%- if config.smtp_enabled %>
+      # SMTP Host
+      config.contao.smtp.host = '<%= config.smtp_host %>'
 
-    # SMTP Pass
-    config.contao.smtp.pass = '<%= config.smtp_pass %>'
+      # SMTP User
+      config.contao.smtp.user = '<%= config.smtp_user %>'
 
-    # SMTP SSL
-    config.contao.smtp.ssl = <%= config.smtp_ssl %>
+      # SMTP Pass
+      config.contao.smtp.pass = '<%= config.smtp_pass %>'
 
-    # SMTP Port
-    config.contao.smtp.port = <%= config.smtp_port %>
-    <%- end %>
+      # SMTP SSL
+      config.contao.smtp.ssl = <%= config.smtp_ssl %>
+
+      # SMTP Port
+      config.contao.smtp.port = <%= config.smtp_port %>
+      <%- end %>
+
+    end
   end
 end
