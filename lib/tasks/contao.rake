@@ -12,7 +12,7 @@ def ask(what, options = {})
     q.validate = validate
     q.responses[:not_valid] = what
     unless echo
-      q.echo = "*"
+      q.echo = '*'
     end
   end
 end
@@ -22,7 +22,7 @@ def public_path
 end
 
 namespace :contao do
-  desc "Link all contao files"
+  desc 'Link all contao files'
   task :bootstrap do
     TechnoGate::Contao::Application.linkify
 
@@ -35,22 +35,22 @@ namespace :contao do
     Rake::Task['assets:precompile'].invoke if Rails.env.production?
     Rake::Task['contao:fix_permissions'].invoke
 
-    TechnoGate::Contao::Notifier.notify("The contao folder has been bootstraped, Good Luck.", title: "Contao Bootstrap")
+    TechnoGate::Contao::Notifier.notify 'The contao folder has been bootstraped, Good Luck.'
   end
 
   desc 'Apply Patches'
   task :apply_patches do
     path = File.expand_path "../../../contao_patches/#{Rails.env}", __FILE__
     Dir["#{path}/**/*.patch"].each do |patch|
-      TechnoGate::Contao::Notifier.notify("Applying patch #{File.basename patch}", title: "Contao Bootstrap")
+      TechnoGate::Contao::Notifier.notify("Applying patch #{File.basename patch}")
       result = system <<-CMD
         cd #{public_path}
         patch -Nfp1 -i #{patch} --no-backup-if-mismatch
       CMD
 
       if !result
-        TechnoGate::Contao::Notifier.notify("Patch #{File.basename patch} failed to apply", title: "Contao Bootstrap")
-        abort "Please fix patches before bootstrapping"
+        TechnoGate::Contao::Notifier.notify("Patch #{File.basename patch} failed to apply")
+        abort 'Please fix patches before bootstrapping'
       end
     end
   end
@@ -82,57 +82,43 @@ namespace :contao do
 
     FileUtils.chmod 0666, public_path.join('sitemap.xml')
 
-    TechnoGate::Contao::Notifier.notify("The contao folder's permissions has been fixed.", title: "Contao Bootstrap")
+    TechnoGate::Contao::Notifier.notify 'The permissions of the contao folder has been fixed'
   end
 
   desc 'Generate an initializer'
   task :generate_initializer do
     require 'contao/generators/contao_initializer'
 
-    g = TechnoGate::Contao::Generators::ContaoInitializer.new path: Rails.root
-    g.generate
+    TechnoGate::Contao::Generators::ContaoInitializer.new(path: Rails.root).generate
 
-    TechnoGate::Contao::Notifier.notify 'The contao initializer has been generated', title: 'Contao Generator'
+    TechnoGate::Contao::Notifier.notify 'The contao initializer has been generated'
   end
 
   desc "Generate the localconfig.php"
-  task :generate_localconfig do
+  task :generate_localconfig => :environment do
     require 'active_support/core_ext/object/blank'
-    config = TechnoGate::Contao::Application.config.contao.global
+    config = Rails.application.config.contao.dup
 
-    if !config || config.install_password.blank? || config.encryption_key.blank?
-      message = <<-EOS
-        You did not set the install password, and the encryption key in your
-        #{ENV['HOME']}/.contao/config.yml, I cannot generate a localconfig
-        since the required configuration keys are missing.
-      EOS
-      message.gsub!(/ [ ]+/, ' ').gsub!(/\n/, '').gsub!(/^ /, '')
-      TechnoGate::Contao::Notifier.warn(message, title: "Contao Bootstrap")
-    else
-      config = config.clone
-      config.application_name = TechnoGate::Contao::Application.name
+    config.db_server_app = 'mysql'
+    config.db_hostname   = config.global.mysql.host
+    config.db_port       = config.global.mysql.port
+    config.db_username   = config.global.mysql.user
+    config.db_password   = config.global.mysql.pass
+    config.db_database   = config.application_name
 
-      config.db_server_app = 'mysql'
-      config.db_hostname   = config.mysql.host
-      config.db_port       = config.mysql.port
-      config.db_username   = config.mysql.user
-      config.db_password   = config.mysql.pass
-      config.db_database   = TechnoGate::Contao::Application.name
+    localconfig_template = Rails.root.join 'config/examples/localconfig.php.erb'
+    localconfig_path = public_path.join 'system/config/localconfig.php'
 
-      localconfig_template = Rails.root.join 'config/examples/localconfig.php.erb'
-      localconfig_path = public_path.join 'system/config/localconfig.php'
+    localconfig = ERB.new(File.read(localconfig_template), nil, '-').result(binding)
+    File.open(localconfig_path, 'w') {|f| f.write localconfig }
 
-      localconfig = ERB.new(File.read(localconfig_template)).result(binding)
-      File.open(localconfig_path, 'w') {|f| f.write localconfig }
-
-      TechnoGate::Contao::Notifier.notify("The configuration file localconfig.php was generated successfully.", title: "Contao Bootstrap")
-    end
+    TechnoGate::Contao::Notifier.notify 'The configuration file localconfig.php was generated successfully.'
   end
 
   desc "Generate the htaccess file"
   task :generate_htaccess do
     FileUtils.cp public_path.join('.htaccess.default'), public_path.join('.htaccess')
 
-    TechnoGate::Contao::Notifier.notify("The .htaccess was successfully generated.", title: "Contao Bootstrap")
+    TechnoGate::Contao::Notifier.notify 'The .htaccess was successfully generated'
   end
 end
