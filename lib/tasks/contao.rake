@@ -80,6 +80,10 @@ namespace :contao do
       end
     end
 
+    Dir["#{public_path}/system/modules/*/config/runonce.php"].each do |f|
+      FileUtils.chmod 0666, f
+    end
+
     FileUtils.chmod 0666, public_path.join('sitemap.xml')
 
     TechnoGate::Contao::Notifier.notify 'The permissions of the contao folder has been fixed'
