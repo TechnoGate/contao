@@ -9,7 +9,7 @@ This gem will help you to quickly develop a website using [Contao
 CMS](http://www.contao.org/en/) which has pre-built support for
 [Sass](http://sass-lang.com), [Compass](http://compass-style.org),
 [CoffeeScript](http://coffeescript.org),
-[Jasmine](http://pivotal.github.com/jasmine/) and
+[Jasmine](https://jasmine.github.io/) and
 [Capistrano](https://github.com/capistrano/capistrano).
 
 It also feature hashed assets served by the [Contao Assets
@@ -79,7 +79,7 @@ by following the guide at the [Rbenv
 Installer](https://github.com/fesplugas/rbenv-installer) project.
 
 Contao depends on Qt (for headless javascript testing using
-[jasmine](https://github.com/pivotal/jasmine) and
+[jasmine](https://github.com/jasmine/jasmine) and
 [jasmine-headless-webkit](http://johnbintz.github.com/jasmine-headless-webkit),
 to install it, refer to [Capybara Webkit
 Installation](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
